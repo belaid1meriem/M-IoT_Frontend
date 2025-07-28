@@ -4,7 +4,11 @@ import { routes as client } from "@/routes/client";
 
 export const routes: RouteConfig[]= [
     ...admin, 
-    ...client 
+    ...client,
+    {
+      path: "/",
+      element: <div>Welcome to the Home Page</div>,
+    }
 ];
 
 

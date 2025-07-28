@@ -1,10 +1,10 @@
 import type { RouteConfig } from "@/types/RouteConfig";
-import App from "@/App";
+import Admin from "@/pages/Admin";
 
 export const routes: RouteConfig[] = [
   {
     path: "admin",
-    element: <App/>,
+    element: <Admin/>,
     // children: [
     //   {
     //     index: true,
