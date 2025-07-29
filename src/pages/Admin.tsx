@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/layout/Sidebar/app-sidebar"
 import Header from "@/components/layout/Header"
 import {
   SidebarInset,

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { SidebarSection } from "./SidebarSection"
-import { NavUser } from "@/components/nav-user"
+import { NavUser } from "@/components/layout/Sidebar/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -12,8 +12,8 @@ import type { SidebarSection as SidebarSectionType } from "@/types/SidebarSectio
 import logo from "@/assets/m-iot.svg"
 
 const user =  {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Admin IoT",
+    email: "mm_belaid@esi.dz",
     avatar: "/avatars/shadcn.jpg",
 }
 
@@ -22,14 +22,14 @@ export function AppSidebar({ items, ...props }: React.ComponentProps<typeof Side
     <Sidebar variant="inset" {...props}>
 
       {/* Header */}
-      <SidebarHeader>
+      <SidebarHeader className="mb-10">
         <div className="" >
           <img src={logo} alt="M-IoT" className="h-14"  />
         </div>
       </SidebarHeader>
 
       {/* Content */}
-      <SidebarContent className="gap-0 mt-2">
+      <SidebarContent className="gap-4">
         { items.map((section, index) => ( 
           <SidebarSection key={index} title={section.title} items={section.items}/>
           ))

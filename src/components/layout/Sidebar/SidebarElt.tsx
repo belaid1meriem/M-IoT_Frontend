@@ -12,11 +12,11 @@ const SidebarElt = ({item}: {item: SideBarItem}) => {
         <SidebarMenuButton 
             asChild 
             tooltip={item.title}
-            className="rounded-sm"
+            className="rounded-xs"
         >
-            <div className="flex items-center gap-2 w-full">
+            <div className="flex items-center gap-3 w-full">
               <item.icon className="h-4 w-4" />
-              <span>{item.title}</span>
+              <span className="font-medium" >{item.title}</span>
             </div>
         </SidebarMenuButton>
         )
@@ -29,11 +29,11 @@ const SidebarElt = ({item}: {item: SideBarItem}) => {
             asChild 
             tooltip={item.title}
             isActive={isActive}
-            className="data-[active=true]:border-l-3 data-[active=true]:border-primary data-[active=true]:bg-secondary rounded-sm"
+            className="data-[active=true]:border-l-4 data-[active=true]:border-primary data-[active=true]:bg-secondary rounded-xs"
           >
-            <div className="flex items-center gap-2 w-full">
+            <div className="flex items-center gap-3 w-full">
               <item.icon className="h-4 w-4" />
-              <span>{item.title}</span>
+              <span className="font-medium" >{item.title}</span>
             </div>
           </SidebarMenuButton>
         )}

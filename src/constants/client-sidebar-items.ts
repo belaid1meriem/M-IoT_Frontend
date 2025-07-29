@@ -44,7 +44,7 @@ const sidebarItems: SidebarSection[] = [
         ],
       },
       {
-        title: "Reports",
+        title: "Rapports",
         icon: FileText,
         items: [
           {

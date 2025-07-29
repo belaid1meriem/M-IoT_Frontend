@@ -11,10 +11,10 @@ const SidebarSubElt = ({subItem}: {subItem: SideBarSubItem}) => {
         return (
         <SidebarMenuSubButton 
             asChild 
-            className="rounded-sm"
+            className="rounded-xs"
         >
             <div className="flex items-center gap-2 w-full">
-              <span>{subItem.title}</span>
+              <span className="font-medium" >{subItem.title}</span>
             </div>
         </SidebarMenuSubButton>
         )
@@ -26,10 +26,10 @@ const SidebarSubElt = ({subItem}: {subItem: SideBarSubItem}) => {
           <SidebarMenuSubButton 
             asChild 
             isActive={isActive}
-            className="data-[active=true]:border-l-3 data-[active=true]:border-primary data-[active=true]:bg-secondary rounded-sm"
+            className="data-[active=true]:border-l-4 data-[active=true]:border-primary data-[active=true]:bg-secondary rounded-xs"
           >
             <div className="flex items-center gap-2 w-full">
-              <span>{subItem.title}</span>
+              <span className="font-medium" >{subItem.title}</span>
             </div>
           </SidebarMenuSubButton>
         )}

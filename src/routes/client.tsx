@@ -1,5 +1,6 @@
 import type { RouteConfig } from "@/types/RouteConfig";
 import Client from "@/pages/Client";
+import Dashboard from "@/components/client/Dashboard";
 
 export const routes: RouteConfig[] = [
   {
@@ -8,7 +9,7 @@ export const routes: RouteConfig[] = [
     children: [
       {
         index: true,
-        element: <div>Welcome to the Client Dashboard</div>,
+        element: <Dashboard/>,
       },
 
 
