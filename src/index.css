@@ -130,53 +130,53 @@
   --sidebar-ring: oklch(0.556 0 0);
 } */
 
-:root {
+
+.dark {
   --radius: 0.625rem;
 
-  --background: #FAFAFB;
-  --foreground: #1A1A1A;
+  --background: #1A1A1A;
+  --foreground: #FAFAFB;
 
-  --card: #FAFAFB;
-  --card-foreground: #1A1A1A;
+  --card: #1F1F1F;
+  --card-foreground: #FAFAFB;
 
-  --popover: #FAFAFB;
-  --popover-foreground: #1A1A1A;
+  --popover: #2A2A2A;
+  --popover-foreground: #FAFAFB;
 
-  --primary: #3E224A;
-  --primary-foreground: #FAFAFB;
+  --primary: #BFAEC8; /* light lavender version of your purple */
+  --primary-foreground: #1A1A1A;
 
-  --secondary: #BFAEC8;
-  --secondary-foreground: #1A1A1A;
+  --secondary: #3E224A; /* flipped tone */
+  --secondary-foreground: #FAFAFB;
 
-  --muted: #FAFAFB;
-  --muted-foreground: #7C7C7C;
+  --muted: #2A2A2A;
+  --muted-foreground: #A1A1A1;
 
-  --accent: #E8E0ED;
-  --accent-foreground: #1A1A1A;
+  --accent: #3A2D40; /* darker shade of lavender family */
+  --accent-foreground: #FAFAFB;
 
   --destructive: #F44336;
 
-  --border: #E0E0E0;
+  --border: #333333;
   --input: #7C7C7C;
-  --ring: #7C7C7C;
+  --ring: #BFAEC8;
 
+  --chart-1: oklch(0.75 0.22 41.116);
+  --chart-2: oklch(0.68 0.13 184.704);
+  --chart-3: oklch(0.55 0.09 227.392);
+  --chart-4: oklch(0.82 0.17 84.429);
+  --chart-5: oklch(0.76 0.15 70.08);
 
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-
-
-  --sidebar: #F4F4F6;
-  --sidebar-foreground: #1A1A1A;
-  --sidebar-primary: #3E224A;
-  --sidebar-primary-foreground: #F4F4F6;
-  --sidebar-accent: #BFAEC8;
-  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar: #1F1F1F;
+  --sidebar-foreground: #FAFAFB;
+  --sidebar-primary: #BFAEC8;
+  --sidebar-primary-foreground: #1A1A1A;
+  --sidebar-accent: #3E224A;
+  --sidebar-accent-foreground: #FAFAFB;
   --sidebar-border: #3E224A;
-  --sidebar-ring: #3E224A;
+  --sidebar-ring: #BFAEC8;
 }
+
 
 
 @layer base {
@@ -195,4 +195,38 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* WebKit browsers */
+:root::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+:root::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:root::-webkit-scrollbar-thumb {
+  background-color: #BFAEC8; /* Lavender */
+  border-radius: 8px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+:root::-webkit-scrollbar-thumb:hover {
+  background-color: #A38BAF;
+}
+
+/* Hide scrollbar arrows/buttons in WebKit */
+:root::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin; /* Slim scrollbar */
+  scrollbar-color: #BFAEC8 transparent; /* Lavender thumb, transparent track */
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 
 import {
   Collapsible,
@@ -12,40 +12,30 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuAction,
-  SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { NavLink } from "react-router"
+import type { SideBarItem } from "@/types/SidebarItem"
+import SidebarElt from "./SidebarElt"
+import SidebarSubElt from "./SidebarSubElt"
 
-export function NavMain({
-  items,
+export function SidebarSection({
+  items, title
 }: {
-  items: {
-    title: string
-    url: string
-    icon: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+  items: SideBarItem[],
+  title?: string
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      { title && <SidebarGroupLabel>{title}</SidebarGroupLabel> }
       <SidebarMenu>
         {items.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
+          <Collapsible key={item.title} asChild >
+        <SidebarMenuItem>
+            <SidebarElt item={item} />
               {item.items?.length ? (
                 <>
                   <CollapsibleTrigger asChild>
@@ -58,11 +48,7 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </a>
-                          </SidebarMenuSubButton>
+                            <SidebarSubElt subItem={subItem} />
                         </SidebarMenuSubItem>
                       ))}
                     </SidebarMenuSub>
