@@ -5,15 +5,34 @@ export const routes: RouteConfig[] = [
   {
     path: "admin",
     element: <Admin/>,
-    // children: [
-    //   {
-    //     index: true,
-    //     element: <Home />,
-    //   },
-    //   {
-    //     path: "settings",
-    //     element: <Settings />,
-    //   },
-    // ],
+    children: [
+      {
+        path: "clients",
+        element: <div>Clients Page</div>,
+      },
+      {
+        path: "admins",
+        element: <div>Admins page</div>
+      },
+      {
+        path: "tickets",
+        element: <div>Tickets Page</div>,
+      },
+      
+      {
+        path: "maintainance",
+        element: <div>Maintainance Page</div>,
+        children: [
+          {
+            path: "overview",
+            element: <div>Maintainance Overview</div>,
+          },
+          {
+            path: "alerts",
+            element: <div>Maintainance History</div>,
+          }
+        ]
+      }
+    ],
   },
 ];
