@@ -34,7 +34,7 @@ export function SidebarSection({
         {items.map((item) => (
           <Collapsible key={item.title} asChild >
         <SidebarMenuItem>
-            <SidebarElt item={item} />
+            <SidebarElt item={item} end={item?.end} />
               {item.items?.length ? (
                 <>
                   <CollapsibleTrigger asChild>

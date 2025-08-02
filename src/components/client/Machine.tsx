@@ -32,7 +32,7 @@ const dashboardCards: DashboardCardProps[] = [
   }
 ];
 
-const Dashboard = () => {
+const Machine = () => {
   return (
     <>
       <Titles title="Tableau de bord" />
@@ -60,4 +60,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Machine;

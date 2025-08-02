@@ -5,7 +5,7 @@ import type { SideBarItem } from "@/types/SidebarItem"
 import { NavLink } from "react-router"
 
 
-const SidebarElt = ({item}: {item: SideBarItem}) => {
+const SidebarElt = ({item, end = true}: {item: SideBarItem, end?:boolean}) => {
 
     if (!item.url) {
         return (
@@ -23,7 +23,7 @@ const SidebarElt = ({item}: {item: SideBarItem}) => {
     }
 
   return (
-    <NavLink to={item.url} end>
+    <NavLink to={item.url} end={end}>
         {({ isActive }) => (
           <SidebarMenuButton 
             asChild 

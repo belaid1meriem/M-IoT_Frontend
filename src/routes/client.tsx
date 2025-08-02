@@ -1,6 +1,7 @@
 import type { RouteConfig } from "@/types/RouteConfig";
 import Client from "@/pages/Client";
 import Dashboard from "@/components/client/Dashboard";
+import Machine from "@/components/client/Machine";
 
 export const routes: RouteConfig[] = [
   {
@@ -12,7 +13,11 @@ export const routes: RouteConfig[] = [
         element: <Dashboard/>,
       },
 
-
+      {
+        path: "machine/:machineId",
+        element: <Machine/>,
+      },
+      
       {
         path: "alerts",
         element: <div>Alerts Page</div>,

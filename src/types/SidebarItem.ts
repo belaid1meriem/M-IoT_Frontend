@@ -11,4 +11,5 @@ export type SideBarItem = {
   url?: string
   icon: LucideIcon
   items?: SideBarSubItem[]
+  end?: boolean 
 }
