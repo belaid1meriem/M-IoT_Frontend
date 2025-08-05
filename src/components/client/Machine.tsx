@@ -4,6 +4,8 @@ import { AirVent, Droplets, ThermometerSun } from "lucide-react"
 import { ChartAreaGradient } from "../ui/chart-area-gradient";
 import MapCard from "../MapCard";
 import DashboardTable from "../DashboardTable";
+import MachineDetailsCard from "../MachineDetailsCard";
+import { useParams } from "react-router";
 
 const dashboardCards: DashboardCardProps[] = [
   {
@@ -33,11 +35,15 @@ const dashboardCards: DashboardCardProps[] = [
 ];
 
 const Machine = () => {
+  const { machineId } = useParams();
   return (
     <>
-      <Titles title="Tableau de bord" />
+      <Titles title={'Tableau de bord/ '+machineId }/>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="row-span-3 md:col-span-2 col-span-1">
+          <MachineDetailsCard />
+        </div>
         
         {dashboardCards.map((card, index) => (
           <DashboardCard key={index} {...card} />
@@ -45,7 +51,6 @@ const Machine = () => {
 
 
         <div className="lg:col-span-3 md:col-span-2 col-span-1 grid grid-cols-1 max-sm:grid-rows-2 md:grid-cols-2 gap-4">
-          <MapCard/>
           <ChartAreaGradient/>
         </div>
 

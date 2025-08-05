@@ -2,6 +2,8 @@ import type { RouteConfig } from "@/types/RouteConfig";
 import Client from "@/pages/Client";
 import Dashboard from "@/components/client/Dashboard";
 import Machine from "@/components/client/Machine";
+import RapportsHirtory from "@/components/client/RapportsHirtory";
+import { Outlet } from "react-router";
 
 export const routes: RouteConfig[] = [
   {
@@ -47,11 +49,11 @@ export const routes: RouteConfig[] = [
 
       {
         path: "reports",
-        element: <div>Reports Page</div>,
+        element: <Outlet/>,
         children: [
           {
             path: "historique",
-            element: <div>Historique des mesures</div>,
+            element: <RapportsHirtory/>,
           },
           {
             path: "analyse-graphique",

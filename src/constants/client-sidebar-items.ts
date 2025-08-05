@@ -18,7 +18,7 @@ const sidebarItems: SidebarSection[] = [
         title: "Accueil",
         url: "/client",
         icon: Home,
-        end: false
+        // end: false
       },
     ]
   },
