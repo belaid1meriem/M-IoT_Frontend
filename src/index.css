@@ -61,7 +61,7 @@
   --secondary: #BFAEC8;
   --secondary-foreground: #1A1A1A;
 
-  --muted: #FAFAFB;
+  --muted: #E0E0E0;
   --muted-foreground: #7C7C7C;
 
   --accent: #E8E0ED;
@@ -70,7 +70,7 @@
   --destructive: #F44336;
 
   --border: #E0E0E0;
-  --input: #7C7C7C;
+  --input: #E0E0E0;
   --ring: #7C7C7C;
 
 

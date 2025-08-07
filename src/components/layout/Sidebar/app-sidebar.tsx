@@ -10,6 +10,7 @@ import {
 
 import type { SidebarSection as SidebarSectionType } from "@/types/SidebarSection"
 import logo from "@/assets/m-iot.svg"
+import Logo from "@/components/Logo"
 
 const user =  {
     name: "Admin IoT",
@@ -23,9 +24,7 @@ export function AppSidebar({ items, ...props }: React.ComponentProps<typeof Side
 
       {/* Header */}
       <SidebarHeader className="mb-10">
-        <div className="" >
-          <img src={logo} alt="M-IoT" className="h-14"  />
-        </div>
+        <Logo/>
       </SidebarHeader>
 
       {/* Content */}
