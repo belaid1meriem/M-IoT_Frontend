@@ -22,7 +22,7 @@ export function useLogin () {
             setSuccess('Logged in successfully')
 
         } catch (error) {
-            setError('Email or password in invalid')
+            setError('Email or password is invalid')
         } finally{
             setIsLoading(false)
         }

@@ -10,7 +10,11 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     const [refreshToken, setRefreshToken] = useState<string | null>(()=> localStorage.getItem('refreshToken'))
 
     useEffect(()=>{
-        localStorage.setItem('refreshToken', JSON.stringify(refreshToken))
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      } else {
+        localStorage.removeItem('refreshToken');
+      }
     },[refreshToken])
 
     return(

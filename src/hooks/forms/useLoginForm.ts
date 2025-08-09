@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogin } from '../auth/useLogin';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router';
 
 const loginFormSchema = z.object({
     email: z.email(),
@@ -21,6 +22,8 @@ export default function useLoginForm(){
         login
     } = useLogin()
 
+    const navigate = useNavigate()
+
     const form = useForm<LoginFormType>({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -34,7 +37,10 @@ export default function useLoginForm(){
   });
 
   useEffect(()=>{
-    if(success) toast.success(success)
+    if(success) {
+      toast.success(success)
+      navigate("/client")
+    }
   },[success])
 
   useEffect(()=>{

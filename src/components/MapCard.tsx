@@ -3,8 +3,8 @@ import "leaflet/dist/leaflet.css";
 
 const MapCard = () => {
   return (
-    <div className="h-full w-full rounded-xl overflow-hidden shadow-sm">
-      <MapContainer center={[36.75, 3.06]} zoom={12} scrollWheelZoom={false} className="h-full w-full">
+    <div className="h-full w-full rounded-xl overflow-hidden shadow-sm  ">
+      <MapContainer center={[36.75, 3.06]} zoom={12} scrollWheelZoom={false} style={{ zIndex: 0 }} className="h-full w-full">
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

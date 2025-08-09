@@ -12,7 +12,7 @@ export interface DashboardCardProps {
 }
 const DashboardCard = ({Icon, paramName, value, unit, maxValue, lastUpdated}: DashboardCardProps) => {
   return (
-    <Card className="gap-6 pb-3">
+    <Card className="gap-6 pb-3 w-full">
 
         <CardContent className="flex items-center justify-start gap-5" >
             <div className="bg-accent rounded-full flex items-center justify-center p-3 h-18 w-18">

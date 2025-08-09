@@ -19,7 +19,7 @@ export const Pagination = ({
   endEntry,
   totalEntries
 }: PaginationProps) => (
-  <div className="flex items-center justify-between px-4 py-3 border-t bg-muted/50">
+  <div className="flex items-center justify-between px-4 py-3 border-t ">
     <div className="text-sm text-muted-foreground">
       Affichage : {startEntry} - {endEntry} sur {totalEntries} enregistrements
     </div>
