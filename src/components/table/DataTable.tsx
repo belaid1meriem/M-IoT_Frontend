@@ -1,10 +1,26 @@
+// Updated DataTable.tsx
 import { Table } from '@/components/ui/table'
 import { type DataTableProps } from '../../types/Table'
 import { Pagination } from './Pagination'
 import { TableHeader } from './TableHeader'
 import { TableBody } from './TableBody'
+import { DataTableHeader } from './DataTableHeader'
 import { useTableData } from '../../hooks/useTableData'
 import { cn } from '../../lib/utils'
+
+export interface DataTableWithHeaderProps<T> extends DataTableProps<T> {
+  title?: string
+  onSearch?: (query: string) => void
+  onSecondaryAction?: () => void
+  onPrimaryAction?: () => void
+  primaryActionText?: string
+  secondaryActionText?: string
+  hasActions?: {
+    hasPrimaryAction: boolean,
+    hasSecondaryAction: boolean
+  }
+  showHeader?: boolean
+}
 
 export function DataTable<T>({
   data,
@@ -15,8 +31,19 @@ export function DataTable<T>({
   className,
   onRowClick,
   rowClassName,
-  clickableRows = false
-}: DataTableProps<T>) {
+  clickableRows = false,
+  title,
+  onSearch,
+  onSecondaryAction,
+  onPrimaryAction,
+  primaryActionText = 'Exporter',
+  secondaryActionText = 'Filtrer',
+  hasActions = {
+    hasPrimaryAction: true,
+    hasSecondaryAction: true
+  },
+  showHeader = true
+}: DataTableWithHeaderProps<T>) {
   const {
     currentPage,
     filteredData,
@@ -28,27 +55,35 @@ export function DataTable<T>({
   } = useTableData(data, searchKey, rowsPerPage)
 
   const TableComponent = () => (
-    <Table >
+    <Table>
       <TableHeader columns={columns} />
-      <TableBody data={paginatedData}
+      <TableBody 
+        data={paginatedData}
         columns={columns}
         onRowClick={onRowClick}
         rowClassName={rowClassName}
-        clickableRows={clickableRows} />
+        clickableRows={clickableRows} 
+      />
     </Table>
   )
 
   return (
     <div className={cn("", className)}>
+      {/* Integrated Header */}
+      {showHeader && (
+        <DataTableHeader
+          title={title}
+          onSearch={onSearch}
+          onSecondaryAction={onSecondaryAction}
+          onPrimaryAction={onPrimaryAction}
+          primaryActionText={primaryActionText}
+          secondaryActionText={secondaryActionText}
+          hasActions={hasActions}
+        />
+      )}
       
       <div className="p-0">
-        {/* Table Section */}
-        <div className="p-6">
-          <div className="">
-              <TableComponent />
-          </div>
-        </div>
-
+        <TableComponent />
         {/* Pagination Section */}
         {paginated && filteredData.length > 0 && (
           <Pagination
@@ -64,4 +99,3 @@ export function DataTable<T>({
     </div>
   )
 }
-

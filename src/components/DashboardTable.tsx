@@ -1,6 +1,5 @@
 import type { Column } from '@/types/Table'
 import { DataTable } from './table/DataTable'
-import { DataTableHeader } from './table/DataTableHeader'
 import { Card, CardContent } from './ui/card'
 import { StatusBadge } from './ui/StatusBadge'
 import { useState } from 'react'
@@ -14,40 +13,33 @@ type EspaceDeStockage = {
   dateDernierService: string
 }
 
-
 const storageColumns: Column<EspaceDeStockage>[] = [
   { 
     header: 'Objet', 
     accessor: 'objet', 
-    // width: '150px',
     className: 'font-medium rounded-l-sm rounded-b-none px-4',
   },
   { 
     header: 'Numéro de série', 
     accessor: 'numeroSerie', 
-    // width: '180px',
-    // className: 'text-muted-foreground'
+    className: 'text-muted-foreground'
   },
   { 
     header: 'Statut', 
     accessor: 'statut',
-    // width: '150px',
     render: (item: EspaceDeStockage) => <StatusBadge statut={item.statut} />
   },
   { 
     header: "Date d'installation", 
     accessor: 'dateInstallation', 
-    // width: '200px',
-    // className: 'text-muted-foreground'
+    className: 'text-muted-foreground'
   },
   { 
     header: 'Date du dernier service', 
     accessor: 'dateDernierService', 
-    // width: '220px',
-    className: ' rounded-r-sm rounded-b-none',
+    className: 'rounded-r-sm rounded-b-none',
   },
 ]
-
 
 const espacesDeStockage: EspaceDeStockage[] = [
   {
@@ -87,7 +79,6 @@ const espacesDeStockage: EspaceDeStockage[] = [
   }
 ]
 
-
 export const DashboardTable = () => {
   const [data, setData] = useState<EspaceDeStockage[]>(espacesDeStockage)
   const navigate = useNavigate()
@@ -96,6 +87,7 @@ export const DashboardTable = () => {
     console.log('Search query:', query)
     // Return all data if no query provided
     if (!query || query.trim() === '') {
+      setData(espacesDeStockage)
       return 
     }
 
@@ -111,9 +103,10 @@ export const DashboardTable = () => {
 
         const stringValue = String(value).toLowerCase()
         return stringValue.includes(searchQuery)
-    })
-  }))
-}
+      })
+    }))
+  }
+
   const handleFilter = () => {
     console.log('Filter clicked')
     // Implement filter logic here
@@ -124,6 +117,7 @@ export const DashboardTable = () => {
     // Implement export logic here
   }
 
+
   const handleRowClick = (row: EspaceDeStockage, index: number) => {
     navigate(`machine/${row.numeroSerie}`)
   }
@@ -131,24 +125,25 @@ export const DashboardTable = () => {
   return (
     <Card>
       <CardContent>
-      <DataTableHeader
-        title="Espaces de Stockage"
-        onSearch={handleSearch}
-        onFilter={handleFilter}
-        onExport={handleExport}
-      />
-
-      <DataTable
-        data={data}
-        columns={storageColumns}
-        searchable={true}
-        searchKey="objet"
-        scrollable={true}
-        paginated={true}
-        rowsPerPage={3}
-        onRowClick={handleRowClick}
-        clickableRows={true}
-      />
+        <DataTable
+          // Table props
+          data={data}
+          columns={storageColumns}
+          searchable={true}
+          searchKey="objet"
+          scrollable={true}
+          paginated={true}
+          rowsPerPage={3}
+          onRowClick={handleRowClick}
+          clickableRows={true}
+          
+          // Header props (now integrated)
+          title="Espaces de Stockage"
+          onSearch={handleSearch}
+          onSecondaryAction={handleFilter}
+          onPrimaryAction={handleExport}
+          showHeader={true}
+        />
       </CardContent>
     </Card>
   )
