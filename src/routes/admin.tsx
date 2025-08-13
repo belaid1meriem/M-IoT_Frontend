@@ -3,6 +3,7 @@ import Admin from "@/pages/Admin";
 import Clients from "@/components/admin/Clients";
 import { Outlet } from "react-router";
 import ClientDetails from "@/components/admin/ClientDetails";
+import AddClient from "@/components/admin/AddClient/AddClient";
 
 export const routes: RouteConfig[] = [
   {
@@ -20,6 +21,10 @@ export const routes: RouteConfig[] = [
           {
             path: ":id",
             element: <ClientDetails/>
+          },
+          {
+            path:"new",
+            element: <AddClient/>
           }
         ]
       },
