@@ -2,6 +2,7 @@ import type { RouteConfig } from "@/types/RouteConfig";
 import Admin from "@/pages/Admin";
 import Clients from "@/components/admin/Clients";
 import { Outlet } from "react-router";
+import ClientDetails from "@/components/admin/ClientDetails";
 
 export const routes: RouteConfig[] = [
   {
@@ -18,7 +19,7 @@ export const routes: RouteConfig[] = [
           },
           {
             path: ":id",
-            element: <div>CLient page</div>
+            element: <ClientDetails/>
           }
         ]
       },

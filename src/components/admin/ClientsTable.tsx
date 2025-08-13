@@ -45,7 +45,7 @@ export const ClientTable = () => {
     accessor: 'detail', 
     className: 'rounded-r-sm rounded-b-none',
     render: (row: Client) => {
-      return (<p className='cursor-pointer' onClick={()=>navigate('/admin/clients/1')}>Voir plus</p>)
+      return (<p className='cursor-pointer' onClick={()=>navigate('/admin/clients/'+row.id)}>Voir plus</p>)
     }
   },
 ]
