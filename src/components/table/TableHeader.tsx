@@ -9,7 +9,7 @@ type TableHeaderProps<T> = {
 export function TableHeader<T>({ columns }: TableHeaderProps<T>) {
   return (
     <ShadcnTableHeader>
-      <TableRow className='bg-accent'>
+      <TableRow className='bg-accent text-xs font-normal'>
         {columns.map((col, i) => (
           <TableHead
             key={i}

@@ -1,6 +1,7 @@
 import type { RouteConfig } from "@/types/RouteConfig";
 import Admin from "@/pages/Admin";
 import Clients from "@/components/admin/Clients";
+import { Outlet } from "react-router";
 
 export const routes: RouteConfig[] = [
   {
@@ -9,7 +10,17 @@ export const routes: RouteConfig[] = [
     children: [
       {
         path: "clients",
-        element: <Clients/>
+        element: <Outlet/>,
+        children:[
+          {
+            index: true,
+            element: <Clients/>
+          },
+          {
+            path: ":id",
+            element: <div>CLient page</div>
+          }
+        ]
       },
       {
         path: "admins",
