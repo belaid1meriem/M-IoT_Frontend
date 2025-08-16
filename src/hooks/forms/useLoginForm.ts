@@ -39,7 +39,7 @@ export default function useLoginForm(){
   useEffect(()=>{
     if(success) {
       toast.success(success)
-      navigate("/client")
+      navigate("/admin/clients")
     }
   },[success])
 

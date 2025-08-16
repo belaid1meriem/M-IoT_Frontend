@@ -1,4 +1,4 @@
-import apiClient from "@/api/apiClient";
+import { apiClient } from "@/api/apiClient";
 import { useEffect } from "react";
 import useRefreshToken from "./useRefreshToken";
 import { useAuth } from "@/contexts/AuthContext";

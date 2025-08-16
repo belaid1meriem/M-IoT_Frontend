@@ -6,9 +6,7 @@ const useRefreshToken = () => {
 
   const refresh = async () => {
     const response = await axios.post('/user/token/refresh/', {}, {
-      headers: {
         withCredentials: true
-      }
     });
     const accessToken  = response.data.access;
     
