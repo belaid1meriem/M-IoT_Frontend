@@ -14,7 +14,6 @@ const useApiClient = () => {
         const requestIntercept = apiClient.interceptors.request.use(
             config => {
                 if (!config.headers['Authorization']) {
-                  console.log(accessToken)
                     config.headers['Authorization'] = `Bearer ${accessToken}`;
                 }
                 return config;

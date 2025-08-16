@@ -5,3 +5,15 @@ export type Client = {
   adresse: string
   email: string
 }
+
+export interface ClientDetailsData {
+  client: string;
+  industrie: string;
+  description: string;
+  adresse: string;
+  etat: string;
+  telephone: string;
+  email: string;
+  dateAjout: string;
+  sites: string[];
+}

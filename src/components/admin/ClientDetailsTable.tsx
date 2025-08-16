@@ -1,19 +1,7 @@
 import { Edit2, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-
-// Types
-interface ClientDetailsData {
-  client: string;
-  industrie: string;
-  description: string;
-  adresse: string;
-  etat: string;
-  telephone: string;
-  email: string;
-  dateAjout: string;
-  sites: string[];
-}
+import type { ClientDetailsData } from '@/types/Client';
 
 interface ClientDetailsTableProps {
   data?: ClientDetailsData;

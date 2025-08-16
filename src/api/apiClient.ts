@@ -1,14 +1,16 @@
 import axios from 'axios'
 
-export default axios.create({
-  baseURL: import.meta.env.VITE_BACKEND + 'api',
-})
+// export default axios.create({
+//   baseURL: import.meta.env.VITE_BACKEND + 'api',
+// })
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_BACKEND + 'api',
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true
 })
+
+export default apiClient
 
 // // Request interceptor to add token
 // apiClient.interceptors.request.use((config) => {
