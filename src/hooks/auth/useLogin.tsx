@@ -17,7 +17,6 @@ export function useLogin () {
             const response = await apiClient.post('/user/token/', {email, password})
 
             authContext.setAccessToken(response.data.access)
-            authContext.setRefreshToken(response.data.refresh)
 
             setSuccess('Logged in successfully')
 

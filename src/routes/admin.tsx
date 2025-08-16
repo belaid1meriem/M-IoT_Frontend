@@ -4,6 +4,8 @@ import Clients from "@/components/admin/Clients";
 import { Outlet } from "react-router";
 import ClientDetails from "@/components/admin/ClientDetails";
 import AddClient from "@/components/admin/AddClient/AddClient";
+import AddSite from "@/components/admin/AddSite/AddSite";
+import { MultiStepsFormProvider } from "@/contexts/MultiStepsFormContext";
 
 export const routes: RouteConfig[] = [
   {
@@ -24,7 +26,11 @@ export const routes: RouteConfig[] = [
           },
           {
             path:"new",
-            element: <AddClient/>
+            element: <MultiStepsFormProvider totalSteps={2}><AddClient/></MultiStepsFormProvider>
+          },
+          {
+            path:"site/new",
+            element: <MultiStepsFormProvider totalSteps={3}><AddSite/></MultiStepsFormProvider>
           }
         ]
       },

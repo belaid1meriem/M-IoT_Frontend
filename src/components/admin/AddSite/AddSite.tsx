@@ -2,7 +2,7 @@ import Steps from '../../Steps'
 import FormSwitcher from '../../FormSwitcher'
 import { useMultiStepsForm } from '@/contexts/MultiStepsFormContext'
 
-const AddClient = () => {
+const AddSite = () => {
     const {
       currentIndex,
       setCurrentIndex,
@@ -15,4 +15,4 @@ const AddClient = () => {
   )
 }
 
-export default AddClient
+export default AddSite

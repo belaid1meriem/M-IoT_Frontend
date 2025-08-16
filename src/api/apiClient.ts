@@ -7,6 +7,7 @@ export default axios.create({
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_BACKEND + 'api',
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true
 })
 
 // // Request interceptor to add token

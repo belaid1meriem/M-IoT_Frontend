@@ -1,9 +1,10 @@
-import { useState } from "react"
 import Step from "./Step"
 import type { State, StepType } from "@/types/Steps"
 
-const Steps = () => {
-    const [currentIndex, setCurrentIndex] = useState<number>(2)
+type StepsProps = {
+    currentIndex: number
+}
+const Steps = ({ currentIndex }: StepsProps) => {
 
     const getState = (index: number): State =>{
         if (index < currentIndex) return 'completed'
@@ -20,18 +21,14 @@ const Steps = () => {
         {
             index: 2,
             text: 'Compte du client'
-        },
-        {
-            index: 3,
-            text: 'Création des sites'
         }
     ]
 
   return (
-    <div className="bg-muted w-fit py-6 px-1 rounded-full flex flex-col justify-center items-center gap-8">
+    <div className="bg-muted w-fit py-6 px-1 rounded-full flex flex-col justify-center items-center gap-12">
         {
             steps.map((step: StepType)=>{
-                return <Step key={step.index} index={step.index} text={step.text} state={getState(step.index)} />
+                return <Step key={step.index} index={step.index} text={step.text} state={getState(step.index)}/>
             })
         }
     </div>

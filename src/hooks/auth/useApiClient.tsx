@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 
 const useApiClient = () => {
     const refresh = useRefreshToken();
-    const { accessToken, setAccessToken, setRefreshToken, refreshToken } = useAuth();
+    const { accessToken, setAccessToken } = useAuth();
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -29,7 +29,6 @@ const useApiClient = () => {
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
           
-          if (refreshToken) {
             try {
               // Call refresh endpoint with refresh token in body
               const newAccessToken = await refresh()
@@ -44,21 +43,19 @@ const useApiClient = () => {
             } catch (refreshError) {
               // Refresh failed, clear all auth data
               setAccessToken(null);
-              setRefreshToken(null);
               
               // Redirect to login
               navigate('/auth/login')
 
               return Promise.reject(refreshError);
             }
-          } else {
-            // No refresh token, redirect to login
-            setAccessToken(null);
-            setRefreshToken(null);
+          // } else {
+          //   // No refresh token, redirect to login
+          //   setAccessToken(null);
               
-            // Redirect to login
-            navigate('/auth/login')
-          }
+          //   // Redirect to login
+          //   navigate('/auth/login')
+          // }
         }
         
         return Promise.reject(error);
