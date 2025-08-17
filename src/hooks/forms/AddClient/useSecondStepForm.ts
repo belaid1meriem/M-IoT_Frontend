@@ -5,6 +5,7 @@ import { useMultiStepsForm } from '@/contexts/MultiStepsFormContext';
 import { useAddClient, type Client } from '@/hooks/useAddClient';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router';
 
 
 export const schema = z.object({
@@ -27,12 +28,15 @@ export type SecondStepFormValues = z.infer<typeof schema>
 
 export default function useSecondStepForm(){
 
-    const { nextStep, updateStepData, getAllFormData } = useMultiStepsForm()
+    const { updateStepData, formData } = useMultiStepsForm()
     const{
         isLoading,
         error,
+        success,
         addClient
     } = useAddClient()
+
+    const navigate = useNavigate()
 
     const form = useForm<SecondStepFormValues>({
         resolver: zodResolver(schema),
@@ -45,16 +49,21 @@ export default function useSecondStepForm(){
 
 
   const onSubmit = form.handleSubmit(async (values: SecondStepFormValues) => {
-    updateStepData(2,values)
-    const client = getAllFormData() as Client
-    await addClient(client)
-    nextStep()
+    updateStepData(values)
+    // const client = getAllFormData() as Client
+    await addClient({...formData, ...values, role:"client"} as Client)
   });
 
     useEffect(()=>{
-        if (error) toast.error(error)
+      if (error) toast.error(error)
     },[error])
 
+    useEffect(()=>{
+      if (success) {
+        toast.success(success)
+        navigate('/admin/clients')
+      }
+    },[success])
   return {
     isLoading,
     form,

@@ -15,5 +15,8 @@ export interface ClientDetailsData {
   telephone: string;
   email: string;
   dateAjout: string;
-  sites: string[];
+  sites: {
+    id: number,
+    name: string
+  }[];
 }

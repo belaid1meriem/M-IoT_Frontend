@@ -9,7 +9,7 @@ interface MultiStepsFormContextType {
 
   //Form data management
   formData: Record<string, any>;
-  updateStepData: (stepIndex: number, data: any) => void;
+  updateStepData: (data: any) => void;
   getAllFormData: () => any;
   clearFormData: () => void;
 }
@@ -43,11 +43,12 @@ export const MultiStepsFormProvider: React.FC<MultiStepsFormProviderProps> = ({
   };
 
   //Form data management functions
-  const updateStepData = (stepIndex: number, data: any) => {
+  const updateStepData = (data: any) => {
     setFormData(prev => ({
       ...prev,
-      [`step${stepIndex}`]: data
+      ...data
     }));
+    console.log(formData)
   };
 
   const getAllFormData = () => {

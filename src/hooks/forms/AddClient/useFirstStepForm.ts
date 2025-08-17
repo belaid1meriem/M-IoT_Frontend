@@ -46,7 +46,7 @@ export default function useFirstStepForm(){
 
 
   const onSubmit = form.handleSubmit(async (values: FirstStepFormValues) => {
-    updateStepData(1,values)
+    updateStepData(values)
     nextStep()
   });
 

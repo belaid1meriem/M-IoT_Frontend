@@ -19,6 +19,7 @@ export interface Client {
 export function useAddClient () {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
+    const [success, setSuccess] = useState<string | null>(null)
     const apiClient = useApiClient()
 
     const addClient = async (client: Client): Promise<void> =>{
@@ -26,8 +27,9 @@ export function useAddClient () {
         setError(null)
 
         try {
-            // const response = await apiClient.post('/tenants/add-client/', client)
-
+            const response = await apiClient.post('/tenants/add-client/', client)
+            console.log(response)
+            setSuccess('Compte Client crée avec success')
         } catch (error) {
             setError('Email or nom entreprise already exists')
         } finally{
@@ -38,6 +40,7 @@ export function useAddClient () {
     return{
         isLoading,
         error,
+        success,
         addClient
     }
 }

@@ -76,8 +76,7 @@ export const ClientTable = () => {
   }
 
   const handleAddClient = () => {
-    // navigate('add-client')
-    // Or implement add client modal logic
+    navigate('new')
   }
 
   return (

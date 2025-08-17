@@ -8,10 +8,10 @@ const FirstStepForm = () => {
   return (
     <Form {...form}>
       <form
-        className={cn("flex flex-col gap-6")}
+        className={cn("flex flex-col gap-8")}
         onSubmit={onSubmit}
       >
-        <div className="grid gap-6">
+        <div className="grid gap-8">
 
           <FormFieldText
             control={form.control}

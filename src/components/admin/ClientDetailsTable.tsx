@@ -28,7 +28,13 @@ const DEFAULT_CLIENT_DATA: ClientDetailsData = {
   telephone: '0566775689',
   email: 'Sonatrac@gmail.com',
   dateAjout: '05/05/2025',
-  sites: ['Site 1', 'Site 1']
+  sites: [{
+    id: 1,
+    name: 'Site 1'
+  }, {
+    id: 2,
+    name: 'Site 2'
+  }]
 };
 
 const TABLE_ROWS: TableRow[] = [
@@ -50,10 +56,10 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => (
 );
 
 const SiteBadge: React.FC<{ 
-  site: string; 
-}> = ({ site }) => (
+  name: string
+}> = ({ name }) => (
   <Badge variant="outline" >
-    {site}
+    {name}
   </Badge>
 );
 
@@ -117,10 +123,10 @@ const ClientDetailsTable: React.FC<ClientDetailsTableProps> = ({
       <div className="flex-1 px-4">
         <div className="flex items-center gap-2 flex-wrap">
           {clientData.sites.length > 0 ? (
-            clientData.sites.map((site, index) => (
+            clientData.sites.map((site) => (
               <SiteBadge
-                key={`${site}-${index}`}
-                site={site}
+                key={site.id}
+                name={site.name}
               />
             ))
           ) : (

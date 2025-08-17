@@ -18,11 +18,11 @@ export function SecondStepForm({
   return (
     <Form {...form}>
       <form
-        className={cn("flex flex-col gap-6", className)}
+        className={cn("flex flex-col gap-8", className)}
         onSubmit={onSubmit}
         {...props}
       >
-        <div className="grid gap-6">
+        <div className="grid gap-8">
           <FormFieldText
             control={form.control}
             name="telephone"

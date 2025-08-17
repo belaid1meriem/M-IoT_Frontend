@@ -9,7 +9,9 @@ type FormSwitcherProps = {
 const FormSwitcher = ({ currentIndex, getForm, className }: FormSwitcherProps) => {
 
   return (
-    getForm(currentIndex)
+    <div className={className}>
+      { getForm(currentIndex) }
+    </div>
   )
 }
 

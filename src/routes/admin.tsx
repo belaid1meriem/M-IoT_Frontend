@@ -30,7 +30,7 @@ export const routes: RouteConfig[] = [
           },
           {
             path:"site/new",
-            element: <MultiStepsFormProvider totalSteps={3}><AddSite/></MultiStepsFormProvider>
+            element: <MultiStepsFormProvider totalSteps={5}><AddSite/></MultiStepsFormProvider>
           }
         ]
       },
