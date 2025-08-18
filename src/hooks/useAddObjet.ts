@@ -1,12 +1,12 @@
-import { apiClient } from "@/api/apiClient";
 import type { Objet } from "@/types/Objet";
 import { useState } from "react";
+import useApiClient from "./auth/useApiClient";
 
 export function useAddObject() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
+  const apiClient = useApiClient()
   /**
    * Add a new object with provided data
    */
