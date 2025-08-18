@@ -11,16 +11,18 @@ export function useAddSite() {
   /**
    * Add a new site with provided data
    */
-  const addSite = async (siteData: Site, clientId: number): Promise<void> => {
+  const addSite = async (siteData: Site, clientId: number): Promise<number | undefined> => {
     setIsLoading(true);
     setError(null);
     setSuccess(null);
 
     try {
-      await apiClient.post("/site/add-site/?client_id="+clientId, siteData);
+      const response= await apiClient.post("/site/add-site/?client_id="+clientId, siteData);
       setSuccess("Site added successfully");
+      return response.data.id || 1
     } catch (error) {
       setError("Failed to add site");
+      return undefined;
     } finally {
       setIsLoading(false);
     }

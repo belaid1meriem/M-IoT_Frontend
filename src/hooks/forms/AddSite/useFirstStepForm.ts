@@ -5,6 +5,7 @@ import { useMultiStepsForm } from '@/contexts/MultiStepsFormContext';
 
 export const schema = z.object({
     nom: z.string().min(1, 'Le Site doit avoir un nom'),
+    adresse: z.string().min(1, 'Le Site doit avoir une adresse'),
     longitude: z.number().optional().refine(val => val !== undefined, {
         message: "Veuillez sélectionner une position sur la carte"
     }),

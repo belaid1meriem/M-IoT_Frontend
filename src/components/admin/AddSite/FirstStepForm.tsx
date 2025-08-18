@@ -19,7 +19,14 @@ const FirstStepForm = () => {
                         control={form.control}
                         name="nom"
                         label="Nom du site"
-                        placeholder="Entrer le nom de l'entreprise"
+                        placeholder="Entrer le nom du site"
+                    />
+
+                    <FormFieldText
+                        control={form.control}
+                        name="adresse"
+                        label="Adresse du site"
+                        placeholder="Entrer l'adresse du site"
                     />
 
                     {/* Map Picker Section */}
