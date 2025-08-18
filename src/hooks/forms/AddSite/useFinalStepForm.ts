@@ -40,6 +40,7 @@ interface StepError {
 interface StepResult {
   success: boolean
   error?: string
+  data?: any
 }
 
 export interface UseCreateCompleteSiteReturn {
@@ -76,11 +77,13 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
   const userHook = useAddUser()
 
   const addStepError = useCallback((step: string, error: string) => {
-    setStepErrors(prev => [...prev, { 
+    const newError: StepError = { 
       step, 
       error, 
       timestamp: new Date() 
-    }])
+    }
+    setStepErrors(prev => [...prev, newError])
+    console.error(`[${step}] Error:`, error)
   }, [])
 
   const resetState = useCallback(() => {
@@ -99,10 +102,14 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
     stepName: string,
     stepFunction: (...args: T) => Promise<any>,
     args: T,
-    errorHook?: string | null
+    errorHook?: 'site' | 'machine' | 'object' | 'user' | null
   ): Promise<StepResult> => {
     try {
+      console.log(`[${stepName}] Starting step...`)
       const result = await stepFunction(...args)
+      
+      // Small delay to allow hook states to update
+      await new Promise(resolve => setTimeout(resolve, 100))
       
       // Check if the corresponding hook has an error
       let hookError: string | null = null
@@ -126,19 +133,28 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
         return { success: false, error: hookError }
       }
       
-      return { success: true }
+      console.log(`[${stepName}] Step completed successfully`)
+      return { success: true, data: result }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Une erreur inconnue est survenue'
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : typeof err === 'string' 
+          ? err 
+          : 'Une erreur inconnue est survenue'
+      
       addStepError(stepName, errorMessage)
       return { success: false, error: errorMessage }
     }
   }
 
   const createCompleteSite = async (data: CompleteSiteData, clientId: number): Promise<void> => {
+    console.log('Starting site creation process...')
     setIsLoading(true)
     setStepErrors([])
     setProgress(0)
     setIsCompleted(false)
+
+    let siteId: number | undefined = undefined
 
     try {
       // Step 1: Create the site with basic info and sensors
@@ -154,6 +170,7 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
         asset_tracking: !!data.site4?.assetTracking
       }
       
+      console.log('Creating site with data:', siteData)
       const siteResult = await executeStep(
         'Création du site',
         siteHook.addSite,
@@ -162,12 +179,21 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
       )
       
       if (!siteResult.success) {
+        addStepError('Création du site', siteResult.error || 'Erreur inconnue lors de la création du site')
         setProgress(100)
         return
       }
       
-      // For now, we'll use a mock siteId since the real one should come from the API response
-      const siteId = 1 // This should come from the actual API response
+      // Get the site ID from the result
+      siteId = siteResult.data
+      console.log('Site created with ID:', siteId)
+      
+      if (!siteId) {
+        addStepError('Création du site', 'ID du site non retourné par l\'API')
+        setProgress(100)
+        return
+      }
+      
       setProgress(25)
 
       // Step 2: Upload machines file if provided
@@ -175,12 +201,17 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
         setCurrentStep('Import des machines...')
         setProgress(35)
         
-        await executeStep(
+        console.log('Uploading machines file')
+        const machineResult = await executeStep(
           'Import des machines',
           machineHook.uploadMachine,
           [data.site3],
           'machine'
         )
+        
+        if (!machineResult.success) {
+          console.warn('Machine upload failed, continuing with other steps')
+        }
         
         setProgress(50)
       }
@@ -194,12 +225,17 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
           setCurrentStep('Import des objets suivis...')
           setProgress(65)
           
-          await executeStep(
+          console.log('Uploading tracked objects file')
+          const objectResult = await executeStep(
             'Import des objets suivis',
             objectHook.uploadObject,
             [data.site4.trackedObjectsFile, siteId, clientId],
             'object'
           )
+          
+          if (!objectResult.success) {
+            console.warn('Object upload failed, continuing with other steps')
+          }
         }
         
         setProgress(75)
@@ -210,22 +246,44 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
         setCurrentStep('Import des utilisateurs...')
         setProgress(80)
         
-        await executeStep(
+        console.log('Uploading users file')
+        const userResult = await executeStep(
           'Import des utilisateurs',
           userHook.uploadUser,
           [data.site5, clientId],
           'user'
         )
         
+        if (!userResult.success) {
+          console.warn('User upload failed, continuing with finalization')
+        }
+        
         setProgress(90)
       }
 
       setCurrentStep('Finalisation...')
       setProgress(100)
-      setIsCompleted(true)
+      
+      // Check if we have any critical errors that should prevent completion
+      const hasCriticalErrors = stepErrors.some(error => 
+        error.step.includes('Création du site') // Only site creation is critical
+      ) || siteHook.error
+
+      if (!hasCriticalErrors) {
+        setIsCompleted(true)
+        console.log('Site creation process completed successfully')
+      } else {
+        console.log('Site creation process completed with critical errors')
+      }
       
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Une erreur critique est survenue'
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : typeof err === 'string' 
+          ? err 
+          : 'Une erreur critique est survenue'
+      
+      console.error('Critical error in site creation process:', err)
       addStepError('Processus général', errorMessage)
       setProgress(100)
     } finally {
