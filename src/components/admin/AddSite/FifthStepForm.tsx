@@ -130,7 +130,6 @@ export function FifthStepForm({
             <Button 
               type="submit" 
               className="flex-1"
-              disabled={!form.watch("usersFile")}
             >
               Finaliser →
             </Button>

@@ -27,7 +27,7 @@ export const schema = z.object({
         }
     ).refine(
         (file) => {
-            if (!file) return false;
+            if (!file) return true;
             return file.size <= 10 * 1024 * 1024; // 10MB
         },
         {

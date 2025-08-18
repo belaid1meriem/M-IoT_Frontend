@@ -3,46 +3,39 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMultiStepsForm } from '@/contexts/MultiStepsFormContext';
 
-// Conditional schema based on asset tracking toggle
+// Schema with optional file upload
 export const schema = z.object({
     assetTracking: z.boolean(),
     trackedObjectsFile: z.any().optional()
 }).superRefine((data, ctx) => {
-    // If asset tracking is enabled, validate the file
-    if (data.assetTracking) {
+    // Only validate file if it's provided
+    if (data.assetTracking && data.trackedObjectsFile) {
         const file = data.trackedObjectsFile;
         
-        if (!file || !(file instanceof File)) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: ['trackedObjectsFile'],
-                message: "Veuillez sélectionner un fichier d'objets suivis"
-            });
-            return;
-        }
-        
-        // Validate file type
-        const allowedTypes = [
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-            'application/vnd.ms-excel', // .xls
-        ];
-        if (!allowedTypes.includes(file.type)) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: ['trackedObjectsFile'],
-                message: "Format de fichier non supporté. Utilisez Excel (.xlsx, .xls) uniquement"
-            });
-            return;
-        }
-        
-        // Validate file size
-        if (file.size > 10 * 1024 * 1024) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: ['trackedObjectsFile'],
-                message: "Le fichier est trop volumineux (max 10MB)"
-            });
-            return;
+        // Validate file type only if file is provided
+        if (file instanceof File) {
+            const allowedTypes = [
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+                'application/vnd.ms-excel', // .xls
+            ];
+            if (!allowedTypes.includes(file.type)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ['trackedObjectsFile'],
+                    message: "Format de fichier non supporté. Utilisez Excel (.xlsx, .xls) uniquement"
+                });
+                return;
+            }
+            
+            // Validate file size
+            if (file.size > 10 * 1024 * 1024) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ['trackedObjectsFile'],
+                    message: "Le fichier est trop volumineux (max 10MB)"
+                });
+                return;
+            }
         }
     }
 });
@@ -65,7 +58,7 @@ export default function useFourthStepForm() {
     const assetTrackingEnabled = form.watch("assetTracking");
 
     const onSubmit = form.handleSubmit(async (values: FourthStepFormValues) => {
-        // Only include file if asset tracking is enabled
+        // Only include file if asset tracking is enabled and file is provided
         const formData = {
             assetTracking: values.assetTracking,
             ...(values.assetTracking && values.trackedObjectsFile && {

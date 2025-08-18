@@ -131,7 +131,6 @@ export function ThirdStepForm({
             <Button 
               type="submit" 
               className="flex-1"
-              disabled={!form.watch("machinesFile")}
             >
               Continuer →
             </Button>

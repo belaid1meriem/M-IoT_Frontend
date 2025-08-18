@@ -7,7 +7,7 @@ import type { StepType } from '@/types/Steps'
 import { ThirdStepForm } from './ThirdStepForm'
 import { FourthStepForm } from './FourthStepForm'
 import { FifthStepForm } from './FifthStepForm'
-import FinalStepForm from './FinalStepForm'
+import { FinalStepForm } from './FinalStepForm'
 const AddSite = () => {
     const {
       currentIndex,

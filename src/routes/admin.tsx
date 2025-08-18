@@ -29,7 +29,7 @@ export const routes: RouteConfig[] = [
             element: <MultiStepsFormProvider totalSteps={2}><AddClient/></MultiStepsFormProvider>
           },
           {
-            path:"site/new",
+            path:"site/new/:clientId",
             element: <MultiStepsFormProvider totalSteps={6}><AddSite/></MultiStepsFormProvider>
           }
         ]

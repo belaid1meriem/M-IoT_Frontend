@@ -179,7 +179,6 @@ export function FourthStepForm({
             <Button 
               type="submit" 
               className="flex-1"
-              disabled={assetTrackingEnabled && !form.watch("trackedObjectsFile")}
             >
               Continuer →
             </Button>
