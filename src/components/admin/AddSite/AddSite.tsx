@@ -7,6 +7,7 @@ import type { StepType } from '@/types/Steps'
 import { ThirdStepForm } from './ThirdStepForm'
 import { FourthStepForm } from './FourthStepForm'
 import { FifthStepForm } from './FifthStepForm'
+import FinalStepForm from './FinalStepForm'
 const AddSite = () => {
     const {
       currentIndex,
@@ -17,6 +18,7 @@ const AddSite = () => {
       if (currentIndex===3) return <ThirdStepForm/>
       if (currentIndex===4) return <FourthStepForm/>
       if (currentIndex===5) return <FifthStepForm/>
+      if (currentIndex===6) return <FinalStepForm/>
       return <div>Form {currentIndex}</div>
     }
 

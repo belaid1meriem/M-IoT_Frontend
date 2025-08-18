@@ -5,14 +5,17 @@ import { useMultiStepsForm } from '@/contexts/MultiStepsFormContext';
 
 // Schema for file upload
 export const schema = z.object({
-    machinesFile: z.any().refine(
-        (file) => file && file instanceof File,
+    machinesFile: z.any().optional().refine(
+        (file) => {
+            if (!file) return true
+            return file instanceof File
+        },
         {
             message: "Veuillez sélectionner un fichier"
         }
     ).refine(
         (file) => {
-            if (!file) return false;
+            if (!file) return true;
             const allowedTypes = [
                 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
                 'application/vnd.ms-excel', // .xls
@@ -41,7 +44,7 @@ export default function useThirdStepForm() {
     const form = useForm<ThirdStepFormValues>({
         resolver: zodResolver(schema),
         defaultValues: {
-            machinesFile: null
+            machinesFile: undefined
         },
         mode: 'onChange',
     });
