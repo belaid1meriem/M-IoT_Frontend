@@ -9,12 +9,12 @@ import {
   Upload, 
   FileText, 
   CheckCircle, 
-  Download,
   Info,
   Target,
   Package
 } from "lucide-react"
 import useFourthStepForm from "@/hooks/forms/AddSite/useFourthStepForm"
+import DownloadTemplate from "@/components/DownloadTemplate"
 
 export function FourthStepForm({
   className,
@@ -37,43 +37,6 @@ export function FourthStepForm({
       default:
         return <FileText className="w-5 h-5 text-gray-600" />;
     }
-  };
-
-  const downloadTemplate = () => {
-    const content = JSON.stringify([
-      {
-        nom: "Ordinateur Portable Dell",
-        code_barre: "DELL001",
-        numero_serie: "DL123456789",
-        type: "Informatique",
-        modele: "Latitude 5520",
-        date_acquisition: "2025-01-15",
-        valeur: 1200.00,
-        localisation: "Bureau 101",
-        responsable: "Jean Dupont",
-        statut: "En service"
-      },
-      {
-        nom: "Imprimante HP",
-        code_barre: "HP001",
-        numero_serie: "HP987654321",
-        type: "Périphérique",
-        modele: "LaserJet Pro MFP",
-        date_acquisition: "2025-01-20",
-        valeur: 450.00,
-        localisation: "Salle impression",
-        responsable: "Marie Martin",
-        statut: "En service"
-      }
-    ], null, 2);
-
-    const blob = new Blob([content], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'template_objets_suivis.json';
-    a.click();
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -136,7 +99,7 @@ export function FourthStepForm({
                   Importez la liste des objets à suivre depuis un fichier Excel. Le fichier sera traité par le serveur.
                 </AlertDescription>
               </Alert>
-
+              <DownloadTemplate/>
               {/* File Upload */}
               <Card>
                 <CardHeader>

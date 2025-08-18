@@ -3,15 +3,13 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 import { 
   Upload, 
   FileText, 
   CheckCircle, 
-  Download,
-  Info
 } from "lucide-react"
 import useThirdStepForm from "@/hooks/forms/AddSite/useThirdStepForm"
+import DownloadTemplate from "@/components/DownloadTemplate"
 
 export function ThirdStepForm({
   className,
@@ -39,50 +37,6 @@ export function ThirdStepForm({
     }
   };
 
-  const downloadTemplate = (format: 'csv' | 'json') => {
-    let content = '';
-    let filename = '';
-    let mimeType = '';
-
-    if (format === 'csv') {
-      content = 'nom,type,modele,numero_serie,date_installation,statut,localisation\n' +
-                'Machine A,Pompe,Model-X1,SN001,2025-01-15,actif,Zone 1\n' +
-                'Machine B,Compresseur,Model-Y2,SN002,2025-01-20,maintenance,Zone 2';
-      filename = 'template_machines.csv';
-      mimeType = 'text/csv';
-    } else {
-      content = JSON.stringify([
-        {
-          nom: "Machine A",
-          type: "Pompe",
-          modele: "Model-X1",
-          numero_serie: "SN001",
-          date_installation: "2025-01-15",
-          statut: "actif",
-          localisation: "Zone 1"
-        },
-        {
-          nom: "Machine B",
-          type: "Compresseur", 
-          modele: "Model-Y2",
-          numero_serie: "SN002",
-          date_installation: "2025-01-20",
-          statut: "maintenance",
-          localisation: "Zone 2"
-        }
-      ], null, 2);
-      filename = 'template_machines.json';
-      mimeType = 'application/json';
-    }
-
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   return (
     <Form {...form}>
@@ -99,7 +53,7 @@ export function ThirdStepForm({
               Importez la liste des machines depuis un fichier Excel
             </p>
           </div>
-
+          <DownloadTemplate/>
           
           {/* File Upload */}
           <Card>

@@ -74,7 +74,7 @@ export default function useFourthStepForm() {
         };
         
         updateStepData({site4: formData});
-        // nextStep();
+        nextStep();
     });
 
     return {

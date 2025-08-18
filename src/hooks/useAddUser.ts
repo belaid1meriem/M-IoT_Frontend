@@ -1,35 +1,34 @@
 import { apiClient } from "@/api/apiClient";
-import type { Machine } from "@/types/Machine";
+import type { User } from "@/types/User";
 import { useState } from "react";
 
-export function useAddMachine() {
+export function useAddUser() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   /**
-   * Add a new machine with provided data
+   * Add a new user with provided data
    */
-  const addMachine = async (machineData: Machine, clientId: number): Promise<void> => {
+  const addUser = async (userData: User, clientId: number): Promise<void> => {
     setIsLoading(true);
     setError(null);
     setSuccess(null);
 
     try {
-      await apiClient.post("/machine/add-machine/?client_id="+clientId, machineData);
-      setSuccess("Machine added successfully");
+      await apiClient.post("/clientUsers/add-clientuser/?client_id="+clientId, userData);
+      setSuccess("User added successfully");
     } catch (error) {
-      setError("Failed to add machine");
+      setError("Failed to add user");
     } finally {
       setIsLoading(false);
     }
   };
 
   /**
-   * ******************TODO**************************
-   * Upload a machine file (e.g. CSV, JSON, Image, etc.)
+   * Upload a user file (bulk import, e.g. CSV or JSON)
    */
-  const uploadMachine = async (file: File): Promise<void> => {
+  const uploadUser = async (file: File, clientId: number): Promise<void> => {
     setIsLoading(true);
     setError(null);
     setSuccess(null);
@@ -38,15 +37,15 @@ export function useAddMachine() {
       const formData = new FormData();
       formData.append("file", file);
 
-      await apiClient.post("/machines/upload/", formData, {
+      await apiClient.post("/clientUsers/upload-clientuser/?client_id="+clientId, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      setSuccess("Machine uploaded successfully");
+      setSuccess("Users uploaded successfully");
     } catch (error) {
-      setError("Failed to upload machine");
+      setError("Failed to upload users");
     } finally {
       setIsLoading(false);
     }
@@ -56,7 +55,7 @@ export function useAddMachine() {
     isLoading,
     error,
     success,
-    addMachine,
-    uploadMachine,
+    addUser,
+    uploadUser,
   };
 }
