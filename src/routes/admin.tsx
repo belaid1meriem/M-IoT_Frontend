@@ -6,6 +6,7 @@ import ClientDetails from "@/components/admin/ClientDetails";
 import AddClient from "@/components/admin/AddClient/AddClient";
 import AddSite from "@/components/admin/AddSite/AddSite";
 import { MultiStepsFormProvider } from "@/contexts/MultiStepsFormContext";
+import SiteDetails from "@/components/admin/SiteDetails";
 
 export const routes: RouteConfig[] = [
   {
@@ -22,7 +23,17 @@ export const routes: RouteConfig[] = [
           },
           {
             path: ":id",
-            element: <ClientDetails/>
+            element: <Outlet/>,
+            children: [
+              {
+                index: true,
+                element: <ClientDetails/>
+              },
+              {
+                path: "site/:siteId",
+                element: <SiteDetails/>
+              }
+            ]
           },
           {
             path:"new",

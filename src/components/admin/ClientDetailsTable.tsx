@@ -2,6 +2,7 @@ import { Edit2, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import type { ClientDetailsData } from '@/types/Client';
+import { useNavigate } from 'react-router';
 
 interface ClientDetailsTableProps {
   data?: ClientDetailsData;
@@ -57,8 +58,9 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => (
 
 const SiteBadge: React.FC<{ 
   name: string
-}> = ({ name }) => (
-  <Badge variant="outline" >
+  onClick: ()=>void
+}> = ({ name, onClick }) => (
+  <Badge variant="outline" onClick={onClick} >
     {name}
   </Badge>
 );
@@ -101,8 +103,10 @@ const ClientDetailsTable: React.FC<ClientDetailsTableProps> = ({
   showEditButton = true,
   className = ""
 }) => {
-  const clientData = data || DEFAULT_CLIENT_DATA;
 
+  const navigate = useNavigate()
+  const clientData = data || DEFAULT_CLIENT_DATA;
+  const openSite = (id: number) => navigate('site/'+id)
   const renderValue = (row: TableRow, value: any): React.ReactNode => {
     if (row.formatter) {
       return row.formatter(value);
@@ -127,6 +131,7 @@ const ClientDetailsTable: React.FC<ClientDetailsTableProps> = ({
               <SiteBadge
                 key={site.id}
                 name={site.name}
+                onClick={()=>openSite(site.id)}
               />
             ))
           ) : (

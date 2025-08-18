@@ -13,7 +13,7 @@ const ClientDetails = () => {
   };
   return (
     <div>
-        <Titles title={'Clients/ '+id} />
+        <Titles title={'Clients/ '+id} showBackButton />
         <ClientDetailsTable
           onEdit={handleEdit}
           onAddSite={handleAddSite}

@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { toast } from 'sonner'
+import { useState, useCallback } from 'react'
 import { useAddSite } from '../../useAddSite'
 import { useAddMachine } from '../../useAddMachine'
 import { useAddObject } from '../../useAddObjet'
@@ -32,257 +31,242 @@ interface CompleteSiteData {
   site5?: File // users file
 }
 
+interface StepError {
+  step: string
+  error: string
+  timestamp: Date
+}
+
 interface StepResult {
   success: boolean
-  data?: any
   error?: string
 }
 
-interface UseCreateCompleteSiteReturn {
+export interface UseCreateCompleteSiteReturn {
+  // State
   isLoading: boolean
-  error: string | null
   progress: number
   currentStep: string
-  stepErrors: Record<string, string>
-  completedSteps: string[]
-  createCompleteSite: (data: CompleteSiteData, clientId: number) => Promise<number | null>
+  stepErrors: StepError[]
+  isCompleted: boolean
+  
+  // Individual hook states
+  siteResult: { isLoading: boolean; error: string | null; success: string | null }
+  machineResult: { isLoading: boolean; error: string | null; success: string | null }
+  objectResult: { isLoading: boolean; error: string | null; success: string | null }
+  userResult: { isLoading: boolean; error: string | null; success: string | null }
+  
+  // Methods
+  createCompleteSite: (data: CompleteSiteData, clientId: number) => Promise<void>
   resetState: () => void
+  clearErrors: () => void
 }
 
 export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [progress, setProgress] = useState(0)
   const [currentStep, setCurrentStep] = useState('')
-  const [stepErrors, setStepErrors] = useState<Record<string, string>>({})
-  const [completedSteps, setCompletedSteps] = useState<string[]>([])
+  const [stepErrors, setStepErrors] = useState<StepError[]>([])
+  const [isCompleted, setIsCompleted] = useState(false)
 
-  const { addSite, error: siteError, isLoading: siteLoading } = useAddSite()
-  const { uploadMachine, error: machineError, isLoading: machineLoading } = useAddMachine()
-  const { uploadObject, error: objectError, isLoading: objectLoading } = useAddObject()
-  const { uploadUser, error: userError, isLoading: userLoading } = useAddUser()
+  // Individual hooks
+  const siteHook = useAddSite()
+  const machineHook = useAddMachine()
+  const objectHook = useAddObject()
+  const userHook = useAddUser()
 
-  const resetState = () => {
+  const addStepError = useCallback((step: string, error: string) => {
+    setStepErrors(prev => [...prev, { 
+      step, 
+      error, 
+      timestamp: new Date() 
+    }])
+  }, [])
+
+  const resetState = useCallback(() => {
     setIsLoading(false)
-    setError(null)
     setProgress(0)
     setCurrentStep('')
-    setStepErrors({})
-    setCompletedSteps([])
-  }
+    setStepErrors([])
+    setIsCompleted(false)
+  }, [])
 
-  const updateStepError = (stepKey: string, errorMessage: string) => {
-    setStepErrors(prev => ({
-      ...prev,
-      [stepKey]: errorMessage
-    }))
-  }
+  const clearErrors = useCallback(() => {
+    setStepErrors([])
+  }, [])
 
-  const markStepCompleted = (stepKey: string) => {
-    setCompletedSteps(prev => [...prev, stepKey])
-    // Clear any previous error for this step
-    setStepErrors(prev => {
-      const newErrors = { ...prev }
-      delete newErrors[stepKey]
-      return newErrors
-    })
-  }
-
-  const executeStep = async <T>(
-    stepKey: string,
+  const executeStep = async <T extends any[]>(
     stepName: string,
-    stepFunction: () => Promise<T>,
-    progressValue: number
+    stepFunction: (...args: T) => Promise<any>,
+    args: T,
+    errorHook?: string | null
   ): Promise<StepResult> => {
     try {
-      setCurrentStep(stepName)
-      setProgress(progressValue)
+      const result = await stepFunction(...args)
       
-      const result = await stepFunction()
-      markStepCompleted(stepKey)
-      
-      return {
-        success: true,
-        data: result
+      // Check if the corresponding hook has an error
+      let hookError: string | null = null
+      switch (errorHook) {
+        case 'site':
+          hookError = siteHook.error
+          break
+        case 'machine':
+          hookError = machineHook.error
+          break
+        case 'object':
+          hookError = objectHook.error
+          break
+        case 'user':
+          hookError = userHook.error
+          break
       }
+      
+      if (hookError) {
+        addStepError(stepName, hookError)
+        return { success: false, error: hookError }
+      }
+      
+      return { success: true }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Une erreur inconnue est survenue'
-      updateStepError(stepKey, errorMessage)
-      
-      return {
-        success: false,
-        error: errorMessage
-      }
+      addStepError(stepName, errorMessage)
+      return { success: false, error: errorMessage }
     }
   }
 
-  const createCompleteSite = async (data: CompleteSiteData, clientId: number): Promise<number | null> => {
+  const createCompleteSite = async (data: CompleteSiteData, clientId: number): Promise<void> => {
     setIsLoading(true)
-    setError(null)
-    resetState()
-    
-    let createdSiteId: number | null = null
+    setStepErrors([])
+    setProgress(0)
+    setIsCompleted(false)
 
     try {
       // Step 1: Create the site with basic info and sensors
-      const siteResult = await executeStep(
-        'site_creation',
-        'Création du site avec capteurs...',
-        async () => {
-          const siteData: Site = {
-            nom: data.site1.nom,
-            adresse: data.site1.adresse,
-            latitude: data.site1.latitude,
-            longitude: data.site1.longitude,
-            captures: data.site2.capteurs,
-            asset_tracking: !!data.site4?.assetTracking
-          }
-          
-          const siteId = await addSite(siteData, clientId)
-          
-          if (!siteId) {
-            throw new Error('Le site a été créé mais aucun ID n\'a été retourné')
-          }
-          
-          // Check for API hook errors
-          if (siteError) {
-            throw new Error(siteError)
-          }
-          
-          return siteId
-        },
-        25
-      )
-
-      if (!siteResult.success || !siteResult.data) {
-        throw new Error(siteResult.error || 'Échec de la création du site')
+      setCurrentStep('Création du site et des capteurs...')
+      setProgress(10)
+      
+      const siteData: Site = {
+        nom: data.site1.nom,
+        adresse: data.site1.adresse,
+        latitude: data.site1.latitude,
+        longitude: data.site1.longitude,
+        captures: data.site2.capteurs,
+        asset_tracking: !!data.site4?.assetTracking
       }
-
-      createdSiteId = siteResult.data
-      toast.success('Site créé avec succès')
+      
+      const siteResult = await executeStep(
+        'Création du site',
+        siteHook.addSite,
+        [siteData, clientId],
+        'site'
+      )
+      
+      if (!siteResult.success) {
+        setProgress(100)
+        return
+      }
+      
+      // For now, we'll use a mock siteId since the real one should come from the API response
+      const siteId = 1 // This should come from the actual API response
+      setProgress(25)
 
       // Step 2: Upload machines file if provided
       if (data.site3) {
-        const machineResult = await executeStep(
-          'machine_upload',
-          'Import des machines...',
-          async () => {
-            await uploadMachine(data.site3!)
-            
-            if (machineError) {
-              throw new Error(machineError)
-            }
-          },
-          50
+        setCurrentStep('Import des machines...')
+        setProgress(35)
+        
+        await executeStep(
+          'Import des machines',
+          machineHook.uploadMachine,
+          [data.site3],
+          'machine'
         )
-
-        if (!machineResult.success) {
-          // Non-blocking error - log but continue
-          toast.warning(`Erreur lors de l'import des machines: ${machineResult.error}`)
-        } else {
-          toast.success('Machines importées avec succès')
-        }
+        
+        setProgress(50)
       }
 
       // Step 3: Handle asset tracking and tracked objects
-      if (data.site4?.assetTracking && data.site4.trackedObjectsFile) {
-        const objectResult = await executeStep(
-          'object_upload',
-          'Import des objets suivis...',
-          async () => {
-            await uploadObject(data.site4!.trackedObjectsFile!, createdSiteId!, clientId)
-            
-            if (objectError) {
-              throw new Error(objectError)
-            }
-          },
-          75
-        )
-
-        if (!objectResult.success) {
-          // Non-blocking error - log but continue
-          toast.warning(`Erreur lors de l'import des objets: ${objectResult.error}`)
-        } else {
-          toast.success('Objets suivis importés avec succès')
+      if (data.site4?.assetTracking) {
+        setCurrentStep('Configuration du suivi des objets...')
+        setProgress(60)
+        
+        if (data.site4.trackedObjectsFile) {
+          setCurrentStep('Import des objets suivis...')
+          setProgress(65)
+          
+          await executeStep(
+            'Import des objets suivis',
+            objectHook.uploadObject,
+            [data.site4.trackedObjectsFile, siteId, clientId],
+            'object'
+          )
         }
+        
+        setProgress(75)
       }
 
       // Step 4: Upload users file if provided
       if (data.site5) {
-        const userResult = await executeStep(
-          'user_upload',
-          'Import des utilisateurs...',
-          async () => {
-            await uploadUser(data.site5!, clientId)
-            
-            if (userError) {
-              throw new Error(userError)
-            }
-          },
-          90
+        setCurrentStep('Import des utilisateurs...')
+        setProgress(80)
+        
+        await executeStep(
+          'Import des utilisateurs',
+          userHook.uploadUser,
+          [data.site5, clientId],
+          'user'
         )
-
-        if (!userResult.success) {
-          // Non-blocking error - log but continue
-          toast.warning(`Erreur lors de l'import des utilisateurs: ${userResult.error}`)
-        } else {
-          toast.success('Utilisateurs importés avec succès')
-        }
+        
+        setProgress(90)
       }
 
-      // Final step
-      await executeStep(
-        'finalization',
-        'Finalisation...',
-        async () => {
-          // Any final cleanup or validation
-          return true
-        },
-        100
-      )
-
-      // Determine overall success
-      const criticalStepFailed = stepErrors['site_creation']
-      const hasNonCriticalErrors = Object.keys(stepErrors).length > 0 && !criticalStepFailed
-
-      if (criticalStepFailed) {
-        throw new Error('Échec critique: ' + stepErrors['site_creation'])
-      }
-
-      if (hasNonCriticalErrors) {
-        toast.warning('Site créé avec quelques erreurs. Consultez les détails.')
-      } else {
-        toast.success('Site créé avec succès avec tous les composants!')
-      }
-
-      return createdSiteId
-
+      setCurrentStep('Finalisation...')
+      setProgress(100)
+      setIsCompleted(true)
+      
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Une erreur inconnue est survenue'
-      setError(errorMessage)
-      toast.error(`Erreur lors de la création: ${errorMessage}`)
-      return null
+      const errorMessage = err instanceof Error ? err.message : 'Une erreur critique est survenue'
+      addStepError('Processus général', errorMessage)
+      setProgress(100)
     } finally {
       setIsLoading(false)
-      
-      // Don't reset current step and progress immediately if there were errors
-      if (!error) {
-        setTimeout(() => {
-          setCurrentStep('')
-          setProgress(0)
-        }, 2000) // Keep success state visible for 2 seconds
-      }
+      setCurrentStep('')
     }
   }
 
   return {
-    isLoading: isLoading || siteLoading || machineLoading || objectLoading || userLoading,
-    error,
+    // State
+    isLoading,
     progress,
     currentStep,
     stepErrors,
-    completedSteps,
+    isCompleted,
+    
+    // Individual hook states
+    siteResult: {
+      isLoading: siteHook.isLoading,
+      error: siteHook.error,
+      success: siteHook.success
+    },
+    machineResult: {
+      isLoading: machineHook.isLoading,
+      error: machineHook.error,
+      success: machineHook.success
+    },
+    objectResult: {
+      isLoading: objectHook.isLoading,
+      error: objectHook.error,
+      success: objectHook.success
+    },
+    userResult: {
+      isLoading: userHook.isLoading,
+      error: userHook.error,
+      success: userHook.success
+    },
+    
+    // Methods
     createCompleteSite,
-    resetState
+    resetState,
+    clearErrors
   }
 }

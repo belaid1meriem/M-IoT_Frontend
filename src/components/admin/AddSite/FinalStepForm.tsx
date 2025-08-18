@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router'
 
 export const FinalStepForm = () => {
   const { formData } = useMultiStepsForm()
-  const { createCompleteSite, isLoading, error, progress, currentStep } = useCreateCompleteSite()
+  const { createCompleteSite, isLoading, progress, currentStep } = useCreateCompleteSite()
   const [isComplete, setIsComplete] = useState(false)
   const params = useParams()
   const navigate = useNavigate()
