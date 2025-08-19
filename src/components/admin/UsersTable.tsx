@@ -1,40 +1,38 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { Column } from '@/types/Table'
 import { DataTable } from '../table/DataTable'
 import type { User } from '@/types/User'
+import Loading from '../Loading'
+import { useUsers } from '@/hooks/useUsers'
 
-// --- Mock data --------------------------------------------------------------
-const MOCK_USERS: User[] = [
-  {
-    email: 'admin@example.com',
-    password: '********',
-    telephone: '+213555000111',
-    role: 'admin',
-  },
-  {
-    email: 'reader@example.com',
-    password: '********',
-    telephone: '+213555000222',
-    role: 'canread',
-  },
-  {
-    email: 'writer@example.com',
-    password: '********',
-    telephone: '+213555000333',
-    role: 'canwrite',
-  },
-]
+interface UsersTableProps {
+  siteId: number
+  clientId: number
+}
 
-// --- Component --------------------------------------------------------------
-export const UsersTable = () => {
-  // Table state (copying your ClientTable pattern)
-  const [filteredData, setFilteredData] = useState<User[]>([])
+export const UsersTable = ({ siteId, clientId }: UsersTableProps) => {
+  const { users, isLoading, error } = useUsers(siteId, clientId)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  useEffect(() => {
-    setFilteredData(MOCK_USERS)
-  }, [])
+  const filteredData = useMemo(() => {
+    if (!searchQuery || searchQuery.trim() === '') {
+      return users
+    }
+
+    const query = searchQuery.trim().toLowerCase()
+
+    return users.filter((row) => {
+      if (
+        row.email.toLowerCase().includes(query) ||
+        row.telephone.toLowerCase().includes(query) ||
+        row.role.toLowerCase().includes(query)
+      )
+        return true
+      return false
+    })
+  }, [users, searchQuery])
 
   const userColumns: Column<User>[] = [
     {
@@ -55,38 +53,35 @@ export const UsersTable = () => {
   ]
 
   const handleSearch = (query: string) => {
-    if (!query || query.trim() === '') {
-      setFilteredData(MOCK_USERS)
-      return
-    }
+    setSearchQuery(query)
+  }
 
-    const searchQuery = query.trim().toLowerCase()
-
-    setFilteredData(
-      MOCK_USERS.filter((row) => {
-        if (
-          row.email.toLowerCase().includes(searchQuery) ||
-          row.telephone.toLowerCase().includes(searchQuery) ||
-          row.role.toLowerCase().includes(searchQuery)
-        )
-          return true
-        return false
-      })
+  if (error) {
+    return (
+      <div className="flex items-center justify-center p-4 text-red-500">
+        <p>Erreur lors du chargement des utilisateurs: {error}</p>
+      </div>
     )
   }
 
   return (
-    <DataTable
-      data={filteredData}
-      columns={userColumns}
-      searchable={true}
-      searchKey="email"
-      scrollable={true}
-      paginated={true}
-      rowsPerPage={4}
-      onSearch={handleSearch}
-      showHeader={false}
-      hasActions={{ hasPrimaryAction: false, hasSecondaryAction: false }}
-    />
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <DataTable
+          data={filteredData}
+          columns={userColumns}
+          searchable={true}
+          searchKey="email"
+          scrollable={true}
+          paginated={true}
+          rowsPerPage={4}
+          onSearch={handleSearch}
+          showHeader={false}
+          hasActions={{ hasPrimaryAction: false, hasSecondaryAction: false }}
+        />
+      )}
+    </>
   )
 }

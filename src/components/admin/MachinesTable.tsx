@@ -1,68 +1,50 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { Column } from '@/types/Table'
 import { DataTable } from '../table/DataTable'
 import type { Machine } from '@/types/Machine'
 import type { Capture } from '@/types/Site'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import CapteursTable from './CapteursTable'
+import Loading from '../Loading'
+import { useMachines } from '@/hooks/useMachines'
 
-// --- Mock data --------------------------------------------------------------
-const MOCK_MACHINES: Machine[] = [
-  {
-    site: 1,
-    identificateur: 'M-001',
-    status: 'active',
-    date_installation: '2025-08-13T10:00:00Z',
-    captures: [
-      {
-        num_serie: 'CAP-101',
-        date_install: '2025-08-09',
-        parametres: [
-          { nom: 'Température', unite: '°C', valeur_max: 100 },
-          { nom: 'Pression', unite: 'bar', valeur_max: 10 },
-        ],
-      },
-    ],
-  },
-  {
-    site: 2,
-    identificateur: 'M-002',
-    status: 'maintenance',
-    date_installation: '2025-07-01T12:00:00Z',
-    captures: [
-      {
-        num_serie: 'CAP-202',
-        date_install: '2025-07-02',
-        parametres: [
-          { nom: 'Humidité', unite: '%', valeur_max: 90 },
-          { nom: 'CO2', unite: 'ppm', valeur_max: 2000 },
-        ],
-      },
-    ],
-  },
-  {
-    site: 1,
-    identificateur: 'M-003',
-    status: 'inactive',
-    date_installation: '2025-06-10T08:30:00Z',
-    captures: [],
-  },
-]
+interface MachinesTableProps {
+  siteId: number
+  clientId: number
+}
 
-// --- Component --------------------------------------------------------------
-export const MachinesTable = () => {
+export const MachinesTable = ({ siteId }: MachinesTableProps) => {
+  const { machines, isLoading, error } = useMachines(siteId)
+  const [searchQuery, setSearchQuery] = useState('')
+  
   // Drawer state
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedMachine, setSelectedMachine] = useState<Machine | null>(null)
 
-  // Table state (copying your ClientTable pattern)
-  const [filteredData, setFilteredData] = useState<Machine[]>([])
+  const filteredData = useMemo(() => {
+    if (!searchQuery || searchQuery.trim() === '') {
+      return machines
+    }
 
-  useEffect(() => {
-    setFilteredData(MOCK_MACHINES)
-  }, [])
+    const query = searchQuery.trim().toLowerCase()
+
+    return machines.filter((row) => {
+      // Simple field search
+      if (
+        row.identificateur.toLowerCase().includes(query) ||
+        row.status.toLowerCase().includes(query) ||
+        row.date_installation.toLowerCase().includes(query)
+      )
+        return true
+
+      // Optional: search inside captures' num_serie
+      return row.captures?.some((c: Capture) =>
+        c.num_serie.toLowerCase().includes(query)
+      )
+    })
+  }, [machines, searchQuery])
 
   const machineColumns: Column<Machine>[] = [
     {
@@ -96,45 +78,35 @@ export const MachinesTable = () => {
   ]
 
   const handleSearch = (query: string) => {
-    if (!query || query.trim() === '') {
-      setFilteredData(MOCK_MACHINES)
-      return
-    }
+    setSearchQuery(query)
+  }
 
-    const searchQuery = query.trim().toLowerCase()
-
-    setFilteredData(
-      MOCK_MACHINES.filter((row) => {
-        // Simple field search
-        if (
-          row.identificateur.toLowerCase().includes(searchQuery) ||
-          row.status.toLowerCase().includes(searchQuery) ||
-          row.date_installation.toLowerCase().includes(searchQuery)
-        )
-          return true
-
-        // Optional: search inside captures' num_serie
-        return row.captures?.some((c: Capture) =>
-          c.num_serie.toLowerCase().includes(searchQuery)
-        )
-      })
+  if (error) {
+    return (
+      <div className="flex items-center justify-center p-4 text-red-500">
+        <p>Erreur lors du chargement des machines: {error}</p>
+      </div>
     )
   }
 
   return (
     <>
-      <DataTable
-        data={filteredData}
-        columns={machineColumns}
-        searchable={true}
-        searchKey="identificateur"
-        scrollable={true}
-        paginated={true}
-        rowsPerPage={4}
-        onSearch={handleSearch}
-        showHeader={false}
-        hasActions={{ hasPrimaryAction: false, hasSecondaryAction: false }}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <DataTable
+          data={filteredData}
+          columns={machineColumns}
+          searchable={true}
+          searchKey="identificateur"
+          scrollable={true}
+          paginated={true}
+          rowsPerPage={4}
+          onSearch={handleSearch}
+          showHeader={false}
+          hasActions={{ hasPrimaryAction: false, hasSecondaryAction: false }}
+        />
+      )}
 
       {/* Slide-in with Capteurs table */}
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -146,7 +118,11 @@ export const MachinesTable = () => {
           </SheetHeader>
 
           <div className="mt-4">
-            <CapteursTable/>
+            <CapteursTable 
+              captures={selectedMachine?.captures || []}
+              isLoading={false}
+              error={null}
+            />
           </div>
         </SheetContent>
       </Sheet>

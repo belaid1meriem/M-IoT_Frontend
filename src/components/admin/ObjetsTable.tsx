@@ -1,8 +1,10 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { Column } from '@/types/Table'
 import { DataTable } from '../table/DataTable'
+import Loading from '../Loading'
+import { useObjets } from '@/hooks/useObjets'
 
 interface Objet {
   num_serie: string;
@@ -10,33 +12,32 @@ interface Objet {
   date_install: string; // ISO date string (e.g. "2025-08-14")
 }
 
+interface ObjetsTableProps {
+  siteId: number
+  clientId: number
+}
 
-// --- Mock data --------------------------------------------------------------
-const MOCK_OBJETS: Objet[] = [
-  {
-    num_serie: 'OBJ-001',
-    type: 'actif',
-    date_install: '2025-08-14',
-  },
-  {
-    num_serie: 'OBJ-002',
-    type: 'passif',
-    date_install: '2025-07-30',
-  },
-  {
-    num_serie: 'OBJ-003',
-    type: 'actif',
-    date_install: '2025-06-20',
-  },
-]
+export const ObjetsTable = ({ siteId }: ObjetsTableProps) => {
+  const { objets, isLoading, error } = useObjets(siteId)
+  const [searchQuery, setSearchQuery] = useState('')
 
-// --- Component --------------------------------------------------------------
-export const ObjetsTable = () => {
-  const [filteredData, setFilteredData] = useState<Objet[]>([])
+  const filteredData = useMemo(() => {
+    if (!searchQuery || searchQuery.trim() === '') {
+      return objets
+    }
 
-  useEffect(() => {
-    setFilteredData(MOCK_OBJETS)
-  }, [])
+    const query = searchQuery.trim().toLowerCase()
+
+    return objets.filter((row) => {
+      if (
+        row.num_serie.toLowerCase().includes(query) ||
+        row.type.toLowerCase().includes(query) ||
+        row.date_install.toLowerCase().includes(query)
+      )
+        return true
+      return false
+    })
+  }, [objets, searchQuery])
 
   const objetColumns: Column<Objet>[] = [
     {
@@ -58,38 +59,35 @@ export const ObjetsTable = () => {
   ]
 
   const handleSearch = (query: string) => {
-    if (!query || query.trim() === '') {
-      setFilteredData(MOCK_OBJETS)
-      return
-    }
+    setSearchQuery(query)
+  }
 
-    const searchQuery = query.trim().toLowerCase()
-
-    setFilteredData(
-      MOCK_OBJETS.filter((row) => {
-        if (
-          row.num_serie.toLowerCase().includes(searchQuery) ||
-          row.type.toLowerCase().includes(searchQuery) ||
-          row.date_install.toLowerCase().includes(searchQuery)
-        )
-          return true
-        return false
-      })
+  if (error) {
+    return (
+      <div className="flex items-center justify-center p-4 text-red-500">
+        <p>Erreur lors du chargement des objets: {error}</p>
+      </div>
     )
   }
 
   return (
-    <DataTable
-      data={filteredData}
-      columns={objetColumns}
-      searchable={true}
-      searchKey="num_serie"
-      scrollable={true}
-      paginated={true}
-      rowsPerPage={4}
-      onSearch={handleSearch}
-      showHeader={false}
-      hasActions={{ hasPrimaryAction: false, hasSecondaryAction: false }}
-    />
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <DataTable
+          data={filteredData}
+          columns={objetColumns}
+          searchable={true}
+          searchKey="num_serie"
+          scrollable={true}
+          paginated={true}
+          rowsPerPage={4}
+          onSearch={handleSearch}
+          showHeader={false}
+          hasActions={{ hasPrimaryAction: false, hasSecondaryAction: false }}
+        />
+      )}
+    </>
   )
 }

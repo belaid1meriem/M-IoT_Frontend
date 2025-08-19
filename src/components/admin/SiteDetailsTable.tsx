@@ -2,10 +2,14 @@ import { Edit2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import type { Site } from '@/types/Site'
-import { useNavigate } from 'react-router'
-import CapteursTable from './CapteursTable' // reuse the one we built
+import CapteursTable from './CapteursTable'
+import Loading from '../Loading'
+import { useSite } from '@/hooks/useSite'
+import { useCaptures } from '@/hooks/useCaptures'
 
 interface SiteDetailsTableProps {
+  siteId: number
+  clientId: number
   site?: Site
   onEdit?: () => void
   showEditButton?: boolean
@@ -46,41 +50,42 @@ const TableRow: React.FC<{
   </div>
 )
 
-// Mock site with captures (for demo)
-const DEFAULT_SITE: Site = {
-  nom: 'Site Hydra',
-  adresse: 'Hydra, Alger',
-  latitude: 36.7529,
-  longitude: 3.042,
-  asset_tracking: true,
-  captures: [
-    {
-      num_serie: 'CAP-001',
-      date_install: '2025-08-09',
-      parametres: [
-        { nom: 'Température', unite: '°C', valeur_max: 100 },
-        { nom: 'Pression', unite: 'bar', valeur_max: 10 },
-      ],
-    },
-    {
-      num_serie: 'CAP-002',
-      date_install: '2025-07-15',
-      parametres: [
-        { nom: 'Humidité', unite: '%', valeur_max: 90 },
-        { nom: 'CO2', unite: 'ppm', valeur_max: 2000 },
-      ],
-    },
-  ],
-}
-
 const SiteDetailsTable: React.FC<SiteDetailsTableProps> = ({
-  site,
+  siteId,
+  clientId,
+  site: propSite,
   onEdit,
   showEditButton = true,
   className = '',
 }) => {
-  const navigate = useNavigate()
-  const siteData = site || DEFAULT_SITE
+  
+  // Use hook to fetch site data if siteId is provided and no site prop
+  const { site: fetchedSite, isLoading: siteLoading, error: siteError } = useSite(siteId, clientId)
+  
+  // Fetch captures for this site
+  const { captures, isLoading: capturesLoading, error: capturesError } = useCaptures(siteId, clientId)
+  
+  const siteData = propSite || fetchedSite
+
+  if (siteLoading) {
+    return <Loading />
+  }
+
+  if (siteError) {
+    return (
+      <div className="flex items-center justify-center p-4 text-red-500">
+        <p>Erreur lors du chargement du site: {siteError}</p>
+      </div>
+    )
+  }
+
+  if (!siteData) {
+    return (
+      <div className="flex items-center justify-center p-4 text-gray-500">
+        <p>Aucune donnée de site disponible</p>
+      </div>
+    )
+  }
 
   return (
     <div className={`w-full space-y-6 ${className}`}>
@@ -116,7 +121,11 @@ const SiteDetailsTable: React.FC<SiteDetailsTableProps> = ({
       {/* --- Captures Table --- */}
       <div>
         <h3 className="text-lg font-semibold mb-2">Capteurs</h3>
-        <CapteursTable />
+        <CapteursTable 
+          captures={captures}
+          isLoading={capturesLoading}
+          error={capturesError}
+        />
       </div>
     </div>
   )
