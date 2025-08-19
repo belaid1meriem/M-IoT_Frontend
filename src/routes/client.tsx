@@ -4,6 +4,7 @@ import Dashboard from "@/components/client/Dashboard";
 import Machine from "@/components/client/Machine";
 import RapportsHirtory from "@/components/client/RapportsHirtory";
 import { Outlet } from "react-router";
+import Localisation from "@/components/admin/AssetsTracking/Localisation";
 
 export const routes: RouteConfig[] = [
   {
@@ -36,8 +37,12 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "localisation",
-            element: <div>Assets Tracking Localisation </div>,
+            element: <Outlet/>,
             children:[
+              {
+                index: true,
+                element: <Localisation/>,
+              },
               {
                 path:"history",
                 element: <div>Assets Tracking Localisation History</div>,

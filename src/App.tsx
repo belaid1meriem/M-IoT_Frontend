@@ -1,14 +1,12 @@
 import { useEffect } from "react"
-import { useResetPassword } from "./hooks/auth/useResetPassword"
 import AppRoutes from "./routes"
 import { Toaster } from "@/components/ui/sonner"
+import { useSSE } from "./hooks/useSSE"
 function App() {
-  // const { resetPassword } = useResetPassword()
-  // useEffect(() => {
-  //   (async () => {
-  //     await resetPassword('mm_belaid@esi.dz')
-  //   })()
-  // }, [])
+//  const { messages, error } = useSSE("http://rofieda.lvh.me:8000/api/captures/trajet-stream/")
+//   useEffect(() => {
+//     console.log('new message:', messages)
+//   }, [messages])
   return (
     <>
       <AppRoutes />

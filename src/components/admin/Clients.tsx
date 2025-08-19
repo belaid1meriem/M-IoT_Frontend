@@ -1,4 +1,3 @@
-import React from 'react'
 import Titles from '../Titles'
 import ClientTable from './ClientsTable'
 
