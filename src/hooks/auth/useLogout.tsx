@@ -8,7 +8,7 @@ export function useLogout () {
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState<string | null>(null)
     const navigate = useNavigate()
-    const { setAccessToken, setRefreshToken } = useAuth()
+    const { setAccessToken } = useAuth()
 
     const logout = async (): Promise<void> =>{
         setIsLoading(true)
@@ -17,8 +17,9 @@ export function useLogout () {
 
         try {
             setAccessToken(null)
-            setRefreshToken(null)
-
+            localStorage.removeItem('role')
+            localStorage.removeItem('subdomain')
+            localStorage.removeItem('clientId')
             setSuccess('Logged out successfully')
             toast.success('Logged out successfully')
             navigate('/auth/login')

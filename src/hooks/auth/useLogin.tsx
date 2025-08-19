@@ -15,9 +15,11 @@ export function useLogin () {
 
         try {
             const response = await apiClient.post('/user/token/', {email, password})
-
+            console.log(response.data)
             authContext.setAccessToken(response.data.access)
-
+            localStorage.setItem('clientId',response.data.client_id)
+            localStorage.setItem('role',response.data.role)
+            localStorage.setItem('subdomain', response.data.subdomain+'.lvh.me')
             setSuccess('Logged in successfully')
 
         } catch (error) {
