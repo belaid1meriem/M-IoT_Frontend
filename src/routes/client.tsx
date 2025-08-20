@@ -29,7 +29,7 @@ export const routes: RouteConfig[] = [
 
       {
         path: "assets-tracking",
-        element: <div>Assets Tracking Page</div>,
+        element: <Outlet/>,
         children: [
           {
             path: "statistics",
@@ -44,7 +44,7 @@ export const routes: RouteConfig[] = [
                 element: <Localisation/>,
               },
               {
-                path:"history",
+                path:"history/:trajetId",
                 element: <div>Assets Tracking Localisation History</div>,
               }
             ]
