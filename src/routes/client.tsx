@@ -6,6 +6,8 @@ import RapportsHirtory from "@/components/client/RapportsHirtory";
 import { Outlet } from "react-router";
 import Localisation from "@/components/admin/AssetsTracking/Localisation";
 import History from "@/components/admin/AssetsTracking/History";
+import Plan from "@/components/admin/AssetsTracking/Plan";
+
 export const routes: RouteConfig[] = [
   {
     path: "client",
@@ -46,6 +48,10 @@ export const routes: RouteConfig[] = [
               {
                 path:"history/:trajetId",
                 element: <History/>,
+              },
+              {
+                path:"plan",
+                element: <Plan/>,
               }
             ]
           }

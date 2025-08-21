@@ -113,7 +113,7 @@ export const trajets: Trajet[] = [
 ];
 
 export const useTrajets = ()=>{
-    const { message, error } = useSSE<Trajet[]>('/captures/trajet-stream/', trajets)
+    const { message, error } = useSSE<Trajet[]>('/captures/trajet-stream-all/', [])
     return {
         message,
         error

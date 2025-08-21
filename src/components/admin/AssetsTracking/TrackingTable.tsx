@@ -187,6 +187,7 @@ const TrackingTable = ({
         paginated={paginated}
         rowsPerPage={rowsPerPage}
         clickableRows={false}
+        scrollable={true}
       />
   );
 };

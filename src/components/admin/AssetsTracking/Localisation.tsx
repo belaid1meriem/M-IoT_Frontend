@@ -2,13 +2,14 @@ import { useTrajets } from '@/hooks/useTrajets'
 import Titles from '../../Titles'
 import TrackingMap from './TrackingMap';
 import TrackingTable from './TrackingTable';
+import { useNavigate } from 'react-router';
 
 const Localisation = () => {
   const { message: trajets, error } = useTrajets();
-
+  const navigate = useNavigate()
   const handlePlanifierTrajet = () => {
     console.log('Planifier un trajet clicked');
-    // Add your logic here
+    navigate('plan')
   };
 
   const handleSearch = (query: string) => {
@@ -60,6 +61,7 @@ const Localisation = () => {
         showHeader={true}
         paginated={true}
         rowsPerPage={10}
+        
       />
     </div>
   );

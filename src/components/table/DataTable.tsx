@@ -55,7 +55,7 @@ export function DataTable<T>({
   } = useTableData(data, searchKey, rowsPerPage)
 
   const TableComponent = () => (
-    <Table>
+    <Table className='overflow-x-scroll'>
       <TableHeader columns={columns} />
       <TableBody 
         data={paginatedData}
