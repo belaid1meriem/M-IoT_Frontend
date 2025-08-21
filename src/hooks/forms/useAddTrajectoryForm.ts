@@ -43,7 +43,7 @@ const addTrajectoryFormSchema = z.object({
   date_prevu_destination: z.string().min(1, 'La date prévue d\'arrivée est requise'),
 
   // Points intermédiaires
-  points: z.array(pointSchema).min(1, 'Au moins un point intermédiaire est requis')
+  points: z.array(pointSchema)
 });
 
 
@@ -54,7 +54,8 @@ export default function useAddTrajectoryForm() {
     isLoading,
     error,
     success,
-    addTrajectory
+    addTrajectory,
+    clearError
   } = useAddTrajectory();
 
   const form = useForm<AddTrajectoryFormType>({
@@ -102,12 +103,7 @@ export default function useAddTrajectoryForm() {
   };
 
   const handleSubmit = form.handleSubmit(async (data: AddTrajectoryFormType) => {
-    try {
       await addTrajectory(data);
-    } catch (err) {
-      console.error('Error submitting form:', err);
-      toast.error('Une erreur est survenue lors de la soumission');
-    }
   });
 
   useEffect(() => {
@@ -129,16 +125,17 @@ export default function useAddTrajectoryForm() {
     }
   }, [success, form]);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(error);
+  //   }
+  // }, [error]);
 
   return {
     form,
     isLoading,
     error,
+    clearError,
     success,
     handleSubmit,
     addPoint,

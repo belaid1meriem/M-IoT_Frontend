@@ -6,7 +6,9 @@ import { Form } from "@/components/ui/form"
 import { Plus, Trash2 } from "lucide-react"
 import { FormFieldText } from "@/components/ui/FormFieldText"
 import useAddTrajectoryForm from "@/hooks/forms/useAddTrajectoryForm"
-
+import { useObjectNames } from "@/hooks/useObjectNames"
+import { FormFieldSelect } from '@/components/ui/FormFieldSelect'
+import {TrajectoryErrorDisplay} from './TrajectoryErrorDisplay'
 export function AddTrajectoryForm({
   className,
   ...props
@@ -17,11 +19,25 @@ export function AddTrajectoryForm({
     handleSubmit,
     addPoint,
     removePoint,
-    points
+    points,
+    error: fetchError,
+    clearError
   } = useAddTrajectoryForm()
+
+
+  const { objectNames, loading, error } = useObjectNames();
 
   return (
     <div className={cn("", className)} {...props}>
+      {/* Error Display */}
+      {fetchError && (
+        <div className="mb-6">
+          <TrajectoryErrorDisplay 
+            error={fetchError}
+            onDismiss={clearError} 
+          />
+        </div>
+      )}
       <Form {...form}>
         <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Trajectory Meta */}
@@ -32,12 +48,18 @@ export function AddTrajectoryForm({
               label="Nom de trajet"
               placeholder="Livraison Alger-Oran"
             />
-            <FormFieldText
-              control={form.control}
-              name="objet_tracking_nom"
-              label="Objet (tracking)"
-              placeholder="Camion_RF001"
-            />
+          <FormFieldSelect
+            control={form.control}
+            name="objet_tracking_nom"
+            label="Objet"
+            placeholder="Camion_RF001"
+            options={objectNames.map((obj) => ({
+              label: obj.nom_objet,
+              value: obj.nom_objet,
+            }))}
+            loading={loading}
+            error={error}
+          />
           </div>
 
           {/* Source */}
