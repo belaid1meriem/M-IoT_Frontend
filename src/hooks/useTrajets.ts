@@ -1,121 +1,12 @@
 import type { Trajet } from "@/types/Trajet"
 import { useSSE } from "./useSSE"
 
-export const trajets: Trajet[] = [
-  {
-    id: 1,
-    nom_trajet: "Livraison Test",
-    objet_nom: "colis_AD",
-    capteur_num_serie: "AD",
-    etat_objet: "recu",
-    localisation_actuelle: "Oran",
-    latitude_actuelle: 36.775965,
-    longitude_actuelle: 3.063005,
-    derniere_mise_a_jour: "2025-08-25",
-    heure_derniere_mise_a_jour: "00:00:00",
-  },
-  {
-    id: 2,
-    nom_trajet: "Trajet 2",
-    objet_nom: "colis_RF02",
-    capteur_num_serie: "RF02",
-    etat_objet: "en_transit",
-    localisation_actuelle: "Oran, Oran",
-    latitude_actuelle: 35.7044415,
-    longitude_actuelle: -0.6502981,
-    derniere_mise_a_jour: "2025-08-21",
-    heure_derniere_mise_a_jour: "10:36:00",
-  },
-  {
-    id: 3,
-    nom_trajet: "Trajet 3",
-    objet_nom: "palette_RF004",
-    capteur_num_serie: "RF004",
-    etat_objet: "en_transit",
-    localisation_actuelle: "Boudouaou El Bahri, Boumerdès",
-    latitude_actuelle: 36.7719,
-    longitude_actuelle: 3.4055,
-    derniere_mise_a_jour: "2025-08-19",
-    heure_derniere_mise_a_jour: "19:00:00",
-  },
-  {
-    id: 4,
-    nom_trajet: "Trajet 3",
-    objet_nom: "palette_RF004",
-    capteur_num_serie: "RF004",
-    etat_objet: "en_transit",
-    localisation_actuelle: "Aït Oumalou, Tizi Ouzou",
-    latitude_actuelle: 36.367764,
-    longitude_actuelle: 6.600887,
-    derniere_mise_a_jour: "2025-08-20",
-    heure_derniere_mise_a_jour: "19:00:00",
-  },
-  {
-    id: 5,
-    nom_trajet: "Trajet3Retour",
-    objet_nom: "palette_RF004",
-    capteur_num_serie: "RF004",
-    etat_objet: "stocke",
-    localisation_actuelle: "Constantine",
-    latitude_actuelle: 36.36718,
-    longitude_actuelle: 6.608809,
-    derniere_mise_a_jour: "2025-08-28",
-    heure_derniere_mise_a_jour: "00:00:00",
-  },
-  {
-    id: 6,
-    nom_trajet: "Trj_colis_RF006_aller",
-    objet_nom: "colis_RF006",
-    capteur_num_serie: "RF006",
-    etat_objet: "recu",
-    localisation_actuelle: "Tlemcen, Tlemcen",
-    latitude_actuelle: 36.7729333,
-    longitude_actuelle: 3.0588445,
-    derniere_mise_a_jour: "2025-09-06",
-    heure_derniere_mise_a_jour: "05:00:00",
-  },
-  {
-    id: 7,
-    nom_trajet: "Trj_machine_RF007_aller",
-    objet_nom: "machine_RF007",
-    capteur_num_serie: "RF007",
-    etat_objet: "stocke",
-    localisation_actuelle: "Alger",
-    latitude_actuelle: 36.766245,
-    longitude_actuelle: 3.050044,
-    derniere_mise_a_jour: "2025-08-28",
-    heure_derniere_mise_a_jour: "00:00:00",
-  },
-  {
-    id: 8,
-    nom_trajet: "Trj_machine_RF007_aller",
-    objet_nom: "machine_RF007",
-    capteur_num_serie: "RF007",
-    etat_objet: "stocke",
-    localisation_actuelle: "Alger",
-    latitude_actuelle: 36.771849,
-    longitude_actuelle: 3.066363,
-    derniere_mise_a_jour: "2025-08-28",
-    heure_derniere_mise_a_jour: "00:00:00",
-  },
-  {
-    id: 9,
-    nom_trajet: "Trj_machine_RF007_aller",
-    objet_nom: "machine_RF007",
-    capteur_num_serie: "RF007",
-    etat_objet: "stocke",
-    localisation_actuelle: "Alger",
-    latitude_actuelle: 36.763013,
-    longitude_actuelle: 3.067931,
-    derniere_mise_a_jour: "2025-08-28",
-    heure_derniere_mise_a_jour: "00:00:00",
-  }
-];
-
 export const useTrajets = ()=>{
-    const { message, error } = useSSE<Trajet[]>('/captures/trajet-stream-all/', [])
+    const { message, error, loading } = useSSE<Trajet[]>('/captures/trajet-stream-all/', [], (event)=>event.trajets)
+ 
     return {
         message,
-        error
+        error,
+        loading
     }
 }
