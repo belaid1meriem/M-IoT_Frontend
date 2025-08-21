@@ -40,7 +40,7 @@ export const FinalStepForm = () => {
   const [showErrors, setShowErrors] = useState(false)
   const params = useParams()
   const navigate = useNavigate()
-  const clientId = parseInt(params.clientId as string, 10)
+  const clientId = parseInt(params.id as string, 10)
 
   // Check if there are any errors from any step
   const hasErrors = stepErrors.length > 0 || 

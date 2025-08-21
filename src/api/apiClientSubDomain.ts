@@ -1,12 +1,9 @@
 import axios from 'axios'
 
-
-
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND + 'api',
+  baseURL: 'http://'+ localStorage.getItem('subdomain')+':8000/' + 'api',
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true
 })
 
 export default apiClient
-

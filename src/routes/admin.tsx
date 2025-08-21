@@ -30,18 +30,24 @@ export const routes: RouteConfig[] = [
                 element: <ClientDetails/>
               },
               {
-                path: "site/:siteId",
-                element: <SiteDetails/>
+                path: "site",
+                element: <Outlet/>,
+                children: [
+                {
+                  path:"new",
+                  element: <MultiStepsFormProvider totalSteps={6}><AddSite/></MultiStepsFormProvider>
+                },
+                {
+                  path: ":siteId",
+                  element: <SiteDetails/>
+                },
+                ]
               }
             ]
           },
           {
             path:"new",
             element: <MultiStepsFormProvider totalSteps={2}><AddClient/></MultiStepsFormProvider>
-          },
-          {
-            path:"site/new/:clientId",
-            element: <MultiStepsFormProvider totalSteps={6}><AddSite/></MultiStepsFormProvider>
           }
         ]
       },
