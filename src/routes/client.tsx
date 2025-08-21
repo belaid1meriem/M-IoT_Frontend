@@ -1,6 +1,12 @@
 import type { RouteConfig } from "@/types/RouteConfig";
 import Client from "@/pages/Client";
 import Dashboard from "@/components/client/Dashboard";
+import Machine from "@/components/client/Machine";
+import RapportsHirtory from "@/components/client/RapportsHirtory";
+import { Outlet } from "react-router";
+import Localisation from "@/components/admin/AssetsTracking/Localisation";
+import History from "@/components/admin/AssetsTracking/History";
+import Plan from "@/components/admin/AssetsTracking/Plan";
 
 export const routes: RouteConfig[] = [
   {
@@ -12,7 +18,11 @@ export const routes: RouteConfig[] = [
         element: <Dashboard/>,
       },
 
-
+      {
+        path: "machine/:machineId",
+        element: <Machine/>,
+      },
+      
       {
         path: "alerts",
         element: <div>Alerts Page</div>,
@@ -21,7 +31,7 @@ export const routes: RouteConfig[] = [
 
       {
         path: "assets-tracking",
-        element: <div>Assets Tracking Page</div>,
+        element: <Outlet/>,
         children: [
           {
             path: "statistics",
@@ -29,11 +39,19 @@ export const routes: RouteConfig[] = [
           },
           {
             path: "localisation",
-            element: <div>Assets Tracking Localisation </div>,
+            element: <Outlet/>,
             children:[
               {
-                path:"history",
-                element: <div>Assets Tracking Localisation History</div>,
+                index: true,
+                element: <Localisation/>,
+              },
+              {
+                path:"history/:trajetId",
+                element: <History/>,
+              },
+              {
+                path:"plan",
+                element: <Plan/>,
               }
             ]
           }
@@ -42,11 +60,11 @@ export const routes: RouteConfig[] = [
 
       {
         path: "reports",
-        element: <div>Reports Page</div>,
+        element: <Outlet/>,
         children: [
           {
             path: "historique",
-            element: <div>Historique des mesures</div>,
+            element: <RapportsHirtory/>,
           },
           {
             path: "analyse-graphique",

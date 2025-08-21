@@ -5,6 +5,7 @@ import {
   Bell,
   ChevronsUpDown,
   CreditCard,
+  LockOpenIcon,
   LogOut,
   Sparkles,
 } from "lucide-react"
@@ -29,6 +30,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { NavLink } from "react-router"
+import { useLogout } from "@/hooks/auth/useLogout"
 
 export function NavUser({
   user,
@@ -40,7 +43,7 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-
+  const { logout } = useLogout()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -86,8 +89,16 @@ export function NavUser({
                 Compte
               </DropdownMenuItem>
             </DropdownMenuGroup>
+            <NavLink to='/auth/change-password'>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <LockOpenIcon />
+                  Changer le mot de passe
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </NavLink>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive hover:text-destructive!" >
+            <DropdownMenuItem className="text-destructive hover:text-destructive!" onClick={logout} >
               <LogOut className="text-destructive" />
               Log out
             </DropdownMenuItem>

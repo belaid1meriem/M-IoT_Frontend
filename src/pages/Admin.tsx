@@ -8,13 +8,13 @@ import { Outlet } from "react-router"
 import sidebarItems from "@/constants/admin-sidebar-items"
 
 
-export default function Admin() {
+export default function Client() {
   return (
     <SidebarProvider>
       <AppSidebar items={sidebarItems} />
-      <SidebarInset>
+      <SidebarInset className="p-6 pt-0">
         <Header/>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-3 p-3 pt-0">
           <Outlet/>
         </div>
       </SidebarInset>

@@ -61,7 +61,7 @@
   --secondary: #BFAEC8;
   --secondary-foreground: #1A1A1A;
 
-  --muted: #FAFAFB;
+  --muted: #E0E0E0;
   --muted-foreground: #7C7C7C;
 
   --accent: #E8E0ED;
@@ -70,13 +70,13 @@
   --destructive: #F44336;
 
   --border: #E0E0E0;
-  --input: #7C7C7C;
+  --input: #E0E0E0;
   --ring: #7C7C7C;
 
 
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-1: #3E224A;
+  --chart-2: #052B3E;
+  --chart-3: #E8E0ED;
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
 
@@ -229,4 +229,24 @@
 * {
   scrollbar-width: thin; /* Slim scrollbar */
   scrollbar-color: #BFAEC8 transparent; /* Lavender thumb, transparent track */
+}
+
+/* Add this to your global CSS or component styles */
+.custom-popup .leaflet-popup-content-wrapper {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.custom-popup .leaflet-popup-tip {
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
 }
