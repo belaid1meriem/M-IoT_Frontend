@@ -3,7 +3,7 @@ import useApiClient from "./auth/useApiClient";
 import type { ClientDetailsData } from "@/types/Client";
 import { toast } from "sonner";
 
-export function useDetailClient ({id}:{id: number}) {
+export function useDetailClient (id: number) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
     const  apiClient = useApiClient()

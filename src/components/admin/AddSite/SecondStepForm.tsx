@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Plus, Minus, Calendar, Hash, Settings } from "lucide-react"
 import useSecondStepForm from "@/hooks/forms/AddSite/useSecondStepForm"
 import { useFieldArray } from "react-hook-form"
+import { FormFieldSelect } from "@/components/ui/FormFieldSelect"
+import { SENSOR_OPTIONS } from "@/constants/sensor-options"
 
 export function SecondStepForm({
   className,
@@ -194,13 +196,13 @@ function CapteurCard({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <FormFieldText
+                <FormFieldSelect
                   control={form.control}
                   name={`capteurs.${capteurIndex}.parametres.${parametreIndex}.nom`}
-                  label="Nom"
+                  label={'Nom'}
                   placeholder="Ex: température"
+                  options={SENSOR_OPTIONS}
                 />
-                
                 <FormFieldText
                   control={form.control}
                   name={`capteurs.${capteurIndex}.parametres.${parametreIndex}.unite`}

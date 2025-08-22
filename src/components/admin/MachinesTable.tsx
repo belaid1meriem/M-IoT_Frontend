@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import type { Column } from '@/types/Table'
 import { DataTable } from '../table/DataTable'
-import type { Machine } from '@/types/Machine'
+import type { MachineGET } from '@/types/Machine'
 import type { Capture } from '@/types/Site'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import CapteursTable from './CapteursTable'
@@ -15,13 +15,13 @@ interface MachinesTableProps {
   clientId: number
 }
 
-export const MachinesTable = ({ siteId }: MachinesTableProps) => {
-  const { machines, isLoading, error } = useMachines(siteId)
+export const MachinesTable = ({ siteId, clientId }: MachinesTableProps) => {
+  const { machines, isLoading, error } = useMachines(clientId,siteId)
   const [searchQuery, setSearchQuery] = useState('')
   
   // Drawer state
   const [sheetOpen, setSheetOpen] = useState(false)
-  const [selectedMachine, setSelectedMachine] = useState<Machine | null>(null)
+  const [selectedMachine, setSelectedMachine] = useState<MachineGET | null>(null)
 
   const filteredData = useMemo(() => {
     if (!searchQuery || searchQuery.trim() === '') {
@@ -35,7 +35,7 @@ export const MachinesTable = ({ siteId }: MachinesTableProps) => {
       if (
         row.identificateur.toLowerCase().includes(query) ||
         row.status.toLowerCase().includes(query) ||
-        row.date_installation.toLowerCase().includes(query)
+        row.date_dernier_serv.toLowerCase().includes(query)
       )
         return true
 
@@ -46,7 +46,7 @@ export const MachinesTable = ({ siteId }: MachinesTableProps) => {
     })
   }, [machines, searchQuery])
 
-  const machineColumns: Column<Machine>[] = [
+  const machineColumns: Column<MachineGET>[] = [
     {
       header: 'Identificateur',
       accessor: 'identificateur',
@@ -57,13 +57,13 @@ export const MachinesTable = ({ siteId }: MachinesTableProps) => {
       header: "Date d'installation",
       accessor: 'date_installation',
       className: '',
-      render: (row: Machine) => new Date(row.date_installation).toLocaleString(),
+      render: (row: MachineGET) => row.date_dernier_serv ? new Date(row.date_dernier_serv).toLocaleDateString() : '-',
     },
     {
       header: ' ',
       accessor: 'detail',
       className: 'rounded-r-sm rounded-b-none',
-      render: (row: Machine) => (
+      render: (row: MachineGET) => (
         <p
           className="cursor-pointer"
           onClick={() => {

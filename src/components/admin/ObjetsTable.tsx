@@ -5,20 +5,15 @@ import type { Column } from '@/types/Table'
 import { DataTable } from '../table/DataTable'
 import Loading from '../Loading'
 import { useObjets } from '@/hooks/useObjets'
-
-interface Objet {
-  num_serie: string;
-  type: string; // e.g. "actif", "passif"
-  date_install: string; // ISO date string (e.g. "2025-08-14")
-}
+import type { ObjetGET } from '@/types/Objet'
 
 interface ObjetsTableProps {
   siteId: number
   clientId: number
 }
 
-export const ObjetsTable = ({ siteId }: ObjetsTableProps) => {
-  const { objets, isLoading, error } = useObjets(siteId)
+export const ObjetsTable = ({ siteId, clientId }: ObjetsTableProps) => {
+  const { objets, isLoading, error } = useObjets(siteId, clientId)
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredData = useMemo(() => {
@@ -39,7 +34,7 @@ export const ObjetsTable = ({ siteId }: ObjetsTableProps) => {
     })
   }, [objets, searchQuery])
 
-  const objetColumns: Column<Objet>[] = [
+  const objetColumns: Column<ObjetGET>[] = [
     {
       header: 'Numéro de série',
       accessor: 'num_serie',
@@ -51,10 +46,21 @@ export const ObjetsTable = ({ siteId }: ObjetsTableProps) => {
       className: '',
     },
     {
+      header: 'Status',
+      accessor: 'status',
+      className: '',
+    },
+    {
+      header: 'Date dernière surviellance ',
+      accessor: 'type',
+      className: '',
+      render: (row: ObjetGET) => row.date_dernier_serveillance ? new Date(row.date_dernier_serveillance).toLocaleDateString() : '-',
+    },
+    {
       header: "Date d'installation",
       accessor: 'date_install',
       className: 'rounded-r-sm rounded-b-none',
-      render: (row: Objet) => new Date(row.date_install).toLocaleDateString(),
+      render: (row: ObjetGET) => row.date_install ? new Date(row.date_install).toLocaleDateString() : '-',
     },
   ]
 

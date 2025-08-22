@@ -1,11 +1,14 @@
-import { Edit2, Plus, X } from 'lucide-react';
+import { Edit2, Plus, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import type { ClientDetailsData } from '@/types/Client';
 import { useNavigate } from 'react-router';
+import { useDetailClient } from '@/hooks/useDetailClient';
+import Loading from '../Loading';
 
 interface ClientDetailsTableProps {
-  data?: ClientDetailsData;
+  clientId: number;
   onEdit?: () => void;
   onAddSite?: () => void;
   showEditButton?: boolean;
@@ -19,34 +22,15 @@ interface TableRow {
   formatter?: (value: any) => React.ReactNode;
 }
 
-// Constants
-const DEFAULT_CLIENT_DATA: ClientDetailsData = {
-  client: 'Sonatrac',
-  industrie: 'industrie',
-  description: 'XXXXXXXXXXXXXX',
-  adresse: 'hydra, alger centre',
-  etat: 'Actif',
-  telephone: '0566775689',
-  email: 'Sonatrac@gmail.com',
-  dateAjout: '05/05/2025',
-  sites: [{
-    id: 1,
-    name: 'Site 1'
-  }, {
-    id: 2,
-    name: 'Site 2'
-  }]
-};
 
 const TABLE_ROWS: TableRow[] = [
-  { key: 'client', label: 'Client' },
+  { key: 'nom_entreprise', label: 'Client' },
   { key: 'industrie', label: 'Industrie' },
-  { key: 'description', label: 'Description' },
   { key: 'adresse', label: 'Adresse' },
-  { key: 'etat', label: 'État', isStatus: true },
+  { key: 'status', label: 'État', isStatus: true },
   { key: 'telephone', label: 'Téléphone' },
   { key: 'email', label: 'Email' },
-  { key: 'dateAjout', label: "Date d'ajout" },
+  { key: 'created_at', label: "Date d'ajout" },
 ];
 
 // Utility Components
@@ -57,11 +41,11 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => (
 );
 
 const SiteBadge: React.FC<{ 
-  name: string
+  nom: string
   onClick: ()=>void
-}> = ({ name, onClick }) => (
-  <Badge variant="outline" onClick={onClick} >
-    {name}
+}> = ({ nom, onClick }) => (
+  <Badge variant="outline" onClick={onClick} className='cursor-pointer' >
+    {nom}
   </Badge>
 );
 
@@ -95,9 +79,11 @@ const TableRow: React.FC<{
   </div>
 );
 
+
+
 // Main Component
 const ClientDetailsTable: React.FC<ClientDetailsTableProps> = ({ 
-  data, 
+  clientId,
   onEdit, 
   onAddSite,
   showEditButton = true,
@@ -105,8 +91,10 @@ const ClientDetailsTable: React.FC<ClientDetailsTableProps> = ({
 }) => {
 
   const navigate = useNavigate()
-  const clientData = data || DEFAULT_CLIENT_DATA;
+  const { isLoading, error, client } = useDetailClient(clientId)
+  
   const openSite = (id: number) => navigate('site/'+id)
+  
   const renderValue = (row: TableRow, value: any): React.ReactNode => {
     if (row.formatter) {
       return row.formatter(value);
@@ -126,11 +114,11 @@ const ClientDetailsTable: React.FC<ClientDetailsTableProps> = ({
       </div>
       <div className="flex-1 px-4">
         <div className="flex items-center gap-2 flex-wrap">
-          {clientData.sites.length > 0 ? (
-            clientData.sites.map((site) => (
+          {client && client.sites && client.sites.length > 0 ? (
+            client.sites.map((site) => (
               <SiteBadge
                 key={site.id}
-                name={site.name}
+                nom={site.nom}
                 onClick={()=>openSite(site.id)}
               />
             ))
@@ -157,6 +145,41 @@ const ClientDetailsTable: React.FC<ClientDetailsTableProps> = ({
     </div>
   );
 
+  // Error State
+  if (error) {
+    return (
+      <div className={`w-full bg-background rounded-sm overflow-hidden border ${className}`}>
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Erreur lors du chargement des détails du client. Veuillez réessayer.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  // Loading State
+  if (isLoading) {
+    return (
+      <Loading/>
+    );
+  }
+
+  // Success State - Render the table
+  if (!client) {
+    return (
+      <div className={`w-full bg-background rounded-sm overflow-hidden border ${className}`}>
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Aucun client trouvé avec cet identifiant.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
   return (
     <div className={`w-full bg-background rounded-sm overflow-hidden border ${className}`}>
       <div className="divide-y">
@@ -164,7 +187,7 @@ const ClientDetailsTable: React.FC<ClientDetailsTableProps> = ({
           <TableRow
             key={row.key}
             label={row.label}
-            value={renderValue(row, clientData[row.key])}
+            value={renderValue(row, client[row.key])}
             showEdit={index === 0 && showEditButton && !!onEdit}
             onEdit={onEdit}
             isFirst={index === 0}

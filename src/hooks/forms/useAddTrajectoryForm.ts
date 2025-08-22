@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { useAddTrajectory } from '../useAddTrajectory';
+import { useNavigate } from 'react-router';
 
 const pointSchema = z.object({
   nom_lieu: z.string().min(1, 'Le nom du lieu est requis'),
@@ -58,6 +59,8 @@ export default function useAddTrajectoryForm() {
     clearError
   } = useAddTrajectory();
 
+  const navigate = useNavigate()
+
   const form = useForm<AddTrajectoryFormType>({
     resolver: zodResolver(addTrajectoryFormSchema),
     defaultValues: {
@@ -104,6 +107,7 @@ export default function useAddTrajectoryForm() {
 
   const handleSubmit = form.handleSubmit(async (data: AddTrajectoryFormType) => {
       await addTrajectory(data);
+      navigate('/client/assets-tracking/localisation')
   });
 
   useEffect(() => {
@@ -124,12 +128,6 @@ export default function useAddTrajectoryForm() {
       });
     }
   }, [success, form]);
-
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(error);
-  //   }
-  // }, [error]);
 
   return {
     form,

@@ -17,6 +17,7 @@ const ClientDetails = () => {
         <ClientDetailsTable
           onEdit={handleEdit}
           onAddSite={handleAddSite}
+          clientId={parseInt(id ? id : '1', 10)}
       />
     </div>
   )

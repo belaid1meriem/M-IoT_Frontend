@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
-import type { Machine } from '@/types/Machine'
+import type { MachineGET } from '@/types/Machine'
 import useApiClient from './auth/useApiClient'
 
 interface UseMachinesReturn {
-  machines: Machine[]
+  machines: MachineGET[]
   isLoading: boolean
   error: string | null
   refetch: () => void
 }
 
-export const useMachines = (siteId?: string | number): UseMachinesReturn => {
-  const [machines, setMachines] = useState<Machine[]>([])
+export const useMachines = (clientId: number, siteId: number): UseMachinesReturn => {
+  const [machines, setMachines] = useState<MachineGET[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const apiClient = useApiClient()
@@ -26,7 +26,7 @@ export const useMachines = (siteId?: string | number): UseMachinesReturn => {
       setIsLoading(true)
       setError(null)
       
-      const endpoint = siteId ? `/sites/${siteId}/machines` : '/machines'
+      const endpoint = '/machine/machines/?client_id='+ clientId+'&site_id='+siteId
       const response = await apiClient.get(endpoint)
       
       setMachines(response.data)
