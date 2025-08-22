@@ -1,21 +1,16 @@
 import { useState, useEffect } from 'react'
 import useApiClient from './auth/useApiClient'
-
-interface Objet {
-  num_serie: string
-  type: string
-  date_install: string
-}
+import type { ObjetGET } from '@/types/Objet'
 
 interface UseObjetsReturn {
-  objets: Objet[]
+  objets: ObjetGET[]
   isLoading: boolean
   error: string | null
   refetch: () => void
 }
 
-export const useObjets = (siteId?: string | number): UseObjetsReturn => {
-  const [objets, setObjets] = useState<Objet[]>([])
+export const useObjets = (siteId: number, clientId: number): UseObjetsReturn => {
+  const [objets, setObjets] = useState<ObjetGET[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const apiClient = useApiClient()
@@ -31,7 +26,7 @@ export const useObjets = (siteId?: string | number): UseObjetsReturn => {
       setIsLoading(true)
       setError(null)
       
-      const endpoint = siteId ? `/sites/${siteId}/objets` : '/objets'
+      const endpoint = '/captures/list-tag-rfid/?client_id='+clientId+'&site_id='+siteId
       const response = await apiClient.get(endpoint)
       
       setObjets(response.data)

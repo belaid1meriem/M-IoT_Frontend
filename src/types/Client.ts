@@ -7,16 +7,15 @@ export type Client = {
 }
 
 export interface ClientDetailsData {
-  client: string;
+  nom_entreprise: string;
   industrie: string;
-  description: string;
   adresse: string;
-  etat: string;
+  status: string;
   telephone: string;
   email: string;
-  dateAjout: string;
+  created_at: string;
   sites: {
     id: number,
-    name: string
+    nom: string
   }[];
 }
