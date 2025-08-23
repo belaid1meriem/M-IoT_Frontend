@@ -30,7 +30,7 @@ export function useAddMachine() {
    * ******************TODO**************************
    * Upload a machine file (e.g. CSV, JSON, Image, etc.)
    */
-  const uploadMachine = async (file: File): Promise<void> => {
+  const uploadMachine = async (file: File, clientId: number): Promise<void> => {
     setIsLoading(true);
     setError(null);
     setSuccess(null);
@@ -39,7 +39,7 @@ export function useAddMachine() {
       const formData = new FormData();
       formData.append("file", file);
 
-      await apiClient.post("/machines/upload/", formData, {
+      await apiClient.post("/machine/upload-machine/?client_id="+clientId, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

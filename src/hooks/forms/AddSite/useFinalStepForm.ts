@@ -205,7 +205,7 @@ export const useCreateCompleteSite = (): UseCreateCompleteSiteReturn => {
         const machineResult = await executeStep(
           'Import des machines',
           machineHook.uploadMachine,
-          [data.site3],
+          [data.site3, clientId],
           'machine'
         )
         
