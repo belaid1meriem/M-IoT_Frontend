@@ -10,7 +10,7 @@ import Plan from "@/components/admin/AssetsTracking/Plan";
 
 export const routes: RouteConfig[] = [
   {
-    path: "client",
+    path: "client/:siteId",
     element: <Client/>,
     children: [
       {

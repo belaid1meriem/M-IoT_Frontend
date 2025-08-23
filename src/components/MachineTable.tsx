@@ -1,5 +1,4 @@
 import { DataTable } from './table/DataTable'
-import { DataTableHeader } from './table/DataTableHeader'
 import { Card, CardContent } from './ui/card'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -206,13 +205,6 @@ export const MachineTable = () => {
   return (
     <Card>
       <CardContent>
-      <DataTableHeader
-        title="Dernier Relevés"
-        onSearch={handleSearch}
-        onFilter={handleFilter}
-        onExport={handleExport}
-      />
-
       <DataTable
         data={data}
         columns={sensorColumns}
@@ -220,9 +212,9 @@ export const MachineTable = () => {
         searchKey="capteur"
         scrollable={true}
         paginated={true}
-        rowsPerPage={3}
-        onRowClick={handleRowClick}
-        clickableRows={true}
+        rowsPerPage={10}
+        clickableRows={false}
+        title='Dernières données des capteurs'
       />
       </CardContent>
     </Card>

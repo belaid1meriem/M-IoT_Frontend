@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import type { SidebarSection as SidebarSectionType } from "@/types/SidebarSection"
-import logo from "@/assets/m-iot.svg"
+
 import Logo from "@/components/Logo"
 
 const user =  {

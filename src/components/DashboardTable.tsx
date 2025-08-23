@@ -2,15 +2,19 @@ import type { Column } from '@/types/Table'
 import { DataTable } from './table/DataTable'
 import { Card, CardContent } from './ui/card'
 import { StatusBadge } from './ui/StatusBadge'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
-type EspaceDeStockage = {
+export type EspaceDeStockage = {
   objet: string
   numeroSerie: string
   statut: 'Actif' | 'En maintenance' | 'En panne'
   dateInstallation: string
   dateDernierService: string
+}
+
+interface DashboardTableProps {
+  data?: EspaceDeStockage[]
 }
 
 const storageColumns: Column<EspaceDeStockage>[] = [
@@ -41,7 +45,8 @@ const storageColumns: Column<EspaceDeStockage>[] = [
   },
 ]
 
-const espacesDeStockage: EspaceDeStockage[] = [
+// Fallback data for when no props are provided
+const defaultEspacesDeStockage: EspaceDeStockage[] = [
   {
     objet: 'Cab 01',
     numeroSerie: 'IOT-001',
@@ -79,21 +84,29 @@ const espacesDeStockage: EspaceDeStockage[] = [
   }
 ]
 
-export const DashboardTable = () => {
-  const [data, setData] = useState<EspaceDeStockage[]>(espacesDeStockage)
+export const DashboardTable = ({ data: propData }: DashboardTableProps) => {
   const navigate = useNavigate()
+  
+  // Use prop data or fallback to default data
+  const sourceData = propData || defaultEspacesDeStockage
+  const [filteredData, setFilteredData] = useState<EspaceDeStockage[]>(sourceData)
+
+  // Update filtered data when source data changes
+  useEffect(() => {
+    setFilteredData(sourceData)
+  }, [sourceData])
 
   const handleSearch = (query: string) => {
     console.log('Search query:', query)
     // Return all data if no query provided
     if (!query || query.trim() === '') {
-      setData(espacesDeStockage)
+      setFilteredData(sourceData)
       return 
     }
 
     const searchQuery = query.trim().toLowerCase()
 
-    setData(espacesDeStockage.filter((row) => {
+    setFilteredData(sourceData.filter((row) => {
       // Search through all fields in the row
       return Object.values(row).some(value => {
         // Skip null, undefined, or non-primitive values
@@ -117,7 +130,6 @@ export const DashboardTable = () => {
     // Implement export logic here
   }
 
-
   const handleRowClick = (row: EspaceDeStockage, index: number) => {
     navigate(`machine/${row.numeroSerie}`)
   }
@@ -127,7 +139,7 @@ export const DashboardTable = () => {
       <CardContent>
         <DataTable
           // Table props
-          data={data}
+          data={filteredData}
           columns={storageColumns}
           searchable={true}
           searchKey="objet"

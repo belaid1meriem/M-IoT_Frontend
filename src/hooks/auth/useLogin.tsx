@@ -18,6 +18,7 @@ export function useLogin () {
             console.log(response.data)
             authContext.setAccessToken(response.data.access)
             localStorage.setItem('clientId',response.data.client_id)
+            localStorage.setItem('siteId',response.data.siteId || 1)
             localStorage.setItem('role',response.data.role)
             localStorage.setItem('subdomain', response.data.subdomain+'.lvh.me')
             setSuccess('Logged in successfully')

@@ -1,6 +1,5 @@
 import type { SidebarSection } from "@/types/SidebarSection"
 
-
 import {
   Home,
   Bell,
@@ -10,13 +9,14 @@ import {
   Wrench,
 } from "lucide-react"
 
+const siteId = localStorage.getItem("siteId") || "1"
 
 const sidebarItems: SidebarSection[] = [
   {
     items: [
       {
         title: "Accueil",
-        url: "/client",
+        url: `/client/${siteId}`,
         icon: Home,
         // end: false
       },
@@ -27,7 +27,7 @@ const sidebarItems: SidebarSection[] = [
     items: [
       {
         title: "Alertes",
-        url: "/client/alerts",
+        url: `/client/${siteId}/alerts`,
         icon: Bell,
       },
       {
@@ -36,11 +36,11 @@ const sidebarItems: SidebarSection[] = [
         items: [
           {
             title: "Statistiques",
-            url: "/client/assets-tracking/statistics",
+            url: `/client/${siteId}/assets-tracking/statistics`,
           },
           {
             title: "Localisation",
-            url: "/client/assets-tracking/localisation",
+            url: `/client/${siteId}/assets-tracking/localisation`,
           },
         ],
       },
@@ -50,25 +50,25 @@ const sidebarItems: SidebarSection[] = [
         items: [
           {
             title: "Historique des mesures",
-            url: "/client/reports/historique",
+            url: `/client/${siteId}/reports/historique`,
           },
           {
             title: "Analyse graphique",
-            url: "/client/reports/analyse-graphique",
+            url: `/client/${siteId}/reports/analyse-graphique`,
           },
           {
             title: "Analyse par seuil",
-            url: "/client/reports/analyse-seuil",
+            url: `/client/${siteId}/reports/analyse-seuil`,
           },
           {
             title: "Résumé journalier",
-            url: "/client/reports/resume-journalier",
+            url: `/client/${siteId}/reports/resume-journalier`,
           },
         ],
       },
       {
         title: "Tickets",
-        url: "/client/tickets",
+        url: `/client/${siteId}/tickets`,
         icon: Ticket,
       },
       {
@@ -77,11 +77,11 @@ const sidebarItems: SidebarSection[] = [
         items: [
           {
             title: "Vue d'ensemble",
-            url: "/client/maintainance/overview",
+            url: `/client/${siteId}/maintainance/overview`,
           },
           {
             title: "Historique d'alertes",
-            url: "/client/maintainance/alerts",
+            url: `/client/${siteId}/maintainance/alerts`,
           },
         ],
       }
