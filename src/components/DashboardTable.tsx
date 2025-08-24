@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
 export type EspaceDeStockage = {
+  id: number
   objet: string
   numeroSerie: string
   statut: 'Actif' | 'En maintenance' | 'En panne'
@@ -14,7 +15,7 @@ export type EspaceDeStockage = {
 }
 
 interface DashboardTableProps {
-  data?: EspaceDeStockage[]
+  data: EspaceDeStockage[]
 }
 
 const storageColumns: Column<EspaceDeStockage>[] = [
@@ -45,50 +46,13 @@ const storageColumns: Column<EspaceDeStockage>[] = [
   },
 ]
 
-// Fallback data for when no props are provided
-const defaultEspacesDeStockage: EspaceDeStockage[] = [
-  {
-    objet: 'Cab 01',
-    numeroSerie: 'IOT-001',
-    statut: 'Actif',
-    dateInstallation: '03/04/2024',
-    dateDernierService: '03/04/2024'
-  },
-  {
-    objet: 'Cab 02',
-    numeroSerie: 'IOT-002',
-    statut: 'En maintenance',
-    dateInstallation: '03/04/2024',
-    dateDernierService: '03/04/2024'
-  },
-  {
-    objet: 'Cab 03',
-    numeroSerie: 'IOT-003',
-    statut: 'En panne',
-    dateInstallation: '03/04/2024',
-    dateDernierService: '03/04/2024'
-  },
-  {
-    objet: 'Cab 04',
-    numeroSerie: 'IOT-004',
-    statut: 'Actif',
-    dateInstallation: '05/04/2024',
-    dateDernierService: '15/05/2024'
-  },
-  {
-    objet: 'Cab 05',
-    numeroSerie: 'IOT-005',
-    statut: 'En maintenance',
-    dateInstallation: '10/04/2024',
-    dateDernierService: '20/05/2024'
-  }
-]
+
 
 export const DashboardTable = ({ data: propData }: DashboardTableProps) => {
   const navigate = useNavigate()
   
   // Use prop data or fallback to default data
-  const sourceData = propData || defaultEspacesDeStockage
+  const sourceData = propData 
   const [filteredData, setFilteredData] = useState<EspaceDeStockage[]>(sourceData)
 
   // Update filtered data when source data changes
@@ -130,7 +94,7 @@ export const DashboardTable = ({ data: propData }: DashboardTableProps) => {
     // Implement export logic here
   }
 
-  const handleRowClick = (row: EspaceDeStockage, index: number) => {
+  const handleRowClick = (row: EspaceDeStockage) => {
     navigate(`machine/${row.numeroSerie}`)
   }
 

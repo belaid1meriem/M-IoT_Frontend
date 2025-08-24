@@ -1,8 +1,6 @@
 import { DataTable } from './table/DataTable'
 import { Card, CardContent } from './ui/card'
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
-
 
 type CapteurData = {
   id: number;
@@ -164,7 +162,6 @@ const mockData: CapteurData[] = [
 
 export const MachineTable = () => {
   const [data, setData] = useState<CapteurData[]>(mockData)
-  const navigate = useNavigate()
 
   const handleSearch = (query: string) => {
     console.log('Search query:', query)
@@ -188,19 +185,6 @@ export const MachineTable = () => {
     })
   }))
 }
-  const handleFilter = () => {
-    console.log('Filter clicked')
-    // Implement filter logic here
-  }
-
-  const handleExport = () => {
-    console.log('Export clicked')
-    // Implement export logic here
-  }
-
-  const handleRowClick = (row: CapteurData, index: number) => {
-    // navigate(`machine/${row.numeroSerie}`)
-  }
 
   return (
     <Card>
@@ -209,6 +193,7 @@ export const MachineTable = () => {
         data={data}
         columns={sensorColumns}
         searchable={true}
+        onSearch={handleSearch}
         searchKey="capteur"
         scrollable={true}
         paginated={true}

@@ -76,7 +76,7 @@ const Machine = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div className="row-span-2 md:col-span-2 col-span-1">
-          {/* <MachineDetailsCard /> */}
+          <MachineDetailsCard />
         </div>
         
         {dashboardCards.map((card, index) => (

@@ -36,7 +36,7 @@ const MachineDetailsCard = () => {
 
         </div>
 
-        <MapCard />
+        <MapCard position={{latitude:36.76, longitude:3.05}} />
 
       </CardContent>
     </Card>
