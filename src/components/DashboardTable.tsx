@@ -95,7 +95,7 @@ export const DashboardTable = ({ data: propData }: DashboardTableProps) => {
   }
 
   const handleRowClick = (row: EspaceDeStockage) => {
-    navigate(`machine/${row.numeroSerie}`)
+    navigate(`machine/${row.id}`)
   }
 
   return (

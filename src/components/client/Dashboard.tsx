@@ -14,7 +14,8 @@ const Dashboard = () => {
   const { 
     dashboardCards, 
     position, 
-    tableData, 
+    tableData,
+    chartData, 
     isLoading, 
     error 
   } = useDashboardSite(siteID as number);
@@ -67,7 +68,7 @@ const Dashboard = () => {
 
         <div className="lg:col-span-3 md:col-span-2 col-span-1 grid grid-cols-1 max-sm:grid-rows-2 md:grid-cols-2 gap-4">
           {position && <MapCard position={position}/>}
-          <ChartAreaGradient/>
+          <ChartAreaGradient chartData={chartData}/>
         </div>
 
         <div className="lg:col-span-3 md:col-span-2 col-span-1">
