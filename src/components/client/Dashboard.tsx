@@ -1,38 +1,61 @@
-import DashboardCard, { type DashboardCardProps } from "../DashboardCard"
+import DashboardCard from "../DashboardCard"
 import Titles from "../Titles"
-import { AirVent, Droplets, ThermometerSun } from "lucide-react"
+
 import { ChartAreaGradient } from "../ui/chart-area-gradient";
 import MapCard from "../MapCard";
 import DashboardTable from "../DashboardTable";
-
-const dashboardCards: DashboardCardProps[] = [
-  {
-    Icon: ThermometerSun,
-    paramName: "Température",
-    value: "25",
-    unit: "°C",
-    maxValue: "20",
-    lastUpdated: "02-10-2024 à 11:01"
-  },
-  {
-    Icon: Droplets,
-    paramName: "Humidité",
-    value: "60",
-    unit: "%",
-    maxValue: "80",
-    lastUpdated: "02-10-2024 à 11:01"
-  },
-  {
-    Icon: AirVent,
-    paramName: "CO₂",
-    value: "420",
-    unit: "ppm",
-    maxValue: "1000",
-    lastUpdated: "02-10-2024 à 11:01"
-  }
-];
+import { useParams } from "react-router";
+import { useDashboardSite } from "@/hooks/dashboard/site/useDashboardSite";
 
 const Dashboard = () => {
+  const { siteId } = useParams()
+  const siteID = siteId ? parseInt(siteId) : null;
+
+  const { 
+    dashboardCards, 
+    position, 
+    tableData,
+    chartData, 
+    isLoading, 
+    error 
+  } = useDashboardSite(siteID as number);
+
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <>
+        <Titles title="Tableau de bord" />
+        <div className="flex items-center justify-center h-96">
+          <div className="flex flex-col items-center gap-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="text-muted-foreground">Chargement du tableau de bord...</div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <>
+        <Titles title="Tableau de bord" />
+        <div className="flex items-center justify-center h-96">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <div className="text-red-500 text-lg">⚠️ Erreur</div>
+            <div className="text-red-500 max-w-md">{error}</div>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            >
+              Actualiser la page
+            </button>
+          </div>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <Titles title="Tableau de bord" />
@@ -43,19 +66,16 @@ const Dashboard = () => {
           <DashboardCard key={index} {...card} />
         ))}
 
-
         <div className="lg:col-span-3 md:col-span-2 col-span-1 grid grid-cols-1 max-sm:grid-rows-2 md:grid-cols-2 gap-4">
-          <MapCard/>
-          <ChartAreaGradient/>
+          {position && <MapCard position={position}/>}
+          <ChartAreaGradient chartData={chartData}/>
         </div>
 
         <div className="lg:col-span-3 md:col-span-2 col-span-1">
-          <DashboardTable/>
+          <DashboardTable data={tableData}/>
         </div>
         
-
       </div>
-
     </>
   );
 };

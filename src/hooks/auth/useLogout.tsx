@@ -19,6 +19,7 @@ export function useLogout () {
             setAccessToken(null)
             localStorage.removeItem('role')
             localStorage.removeItem('subdomain')
+            localStorage.removeItem('siteId')
             localStorage.removeItem('clientId')
             setSuccess('Logged out successfully')
             toast.success('Logged out successfully')

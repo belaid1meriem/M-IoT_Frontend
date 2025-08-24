@@ -1,13 +1,10 @@
 "use client"
-
-import { TrendingUp } from "lucide-react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -20,33 +17,33 @@ import {
 
 export const description = "An area chart with gradient fill"
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+// const chartData = [
+//   { month: "January", this_year: 186, last_year: 80 },
+//   { month: "February", this_year: 305, last_year: 200 },
+//   { month: "March", this_year: 237, last_year: 120 },
+//   { month: "April", this_year: 73, last_year: 190 },
+//   { month: "May", this_year: 209, last_year: 130 },
+//   { month: "June", this_year: 214, last_year: 140 },
+// ]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  this_year: {
+    label: "This Year",
     color: "var(--chart-1)",
   },
-  mobile: {
-    label: "Mobile",
+  last_year: {
+    label: "Last Year",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig
 
-export function ChartAreaGradient() {
+export function ChartAreaGradient({chartData}: {chartData: any}) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Graphique</CardTitle>
         <CardDescription>
-          Showing somethings for the last 6 months
+          Témpératures moyennes mensuelles comparées sur deux ans
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -69,45 +66,45 @@ export function ChartAreaGradient() {
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillthis_year" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-desktop)"
+                  stopColor="var(--color-this_year)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-desktop)"
+                  stopColor="var(--color-this_year)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="filllast_year" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-last_year)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-last_year)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
             <Area
-              dataKey="mobile"
+              dataKey="last_year"
               type="natural"
-              fill="url(#fillMobile)"
+              fill="url(#filllast_year)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke="var(--color-last_year)"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="this_year"
               type="natural"
-              fill="url(#fillDesktop)"
+              fill="url(#fillthis_year)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="var(--color-this_year)"
               stackId="a"
             />
           </AreaChart>
