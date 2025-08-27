@@ -8,11 +8,13 @@ import { useNavigate } from 'react-router';
 const getStateColor = (etat: string) => {
   switch (etat) {
     case 'recu':
+    case 'reçu':
       return 'bg-green-100 text-green-800 hover:bg-green-100';
     case 'stocke':
       return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100';
     case 'en_transit':
       return 'bg-blue-100 text-blue-800 hover:bg-blue-100';
+    case 'perdu':
     default:
       return 'bg-red-100 text-red-800 hover:bg-red-100';
   }
@@ -21,11 +23,14 @@ const getStateColor = (etat: string) => {
 const getStateText = (etat: string) => {
   switch (etat) {
     case 'recu':
+    case 'reçu':
       return 'Reçu';
     case 'stocke':
       return 'Stocké';
     case 'en_transit':
       return 'En transit';
+    case 'perdu':
+      return 'Perdu';
     default:
       return 'Inconnu';
   }

@@ -34,11 +34,13 @@ const createCustomIcon = (color: string) => {
 const getIconByState = (etat: string) => {
   switch (etat) {
     case 'recu':
+    case 'reçu':
       return createCustomIcon('#22c55e'); // Green
     case 'stocke':
       return createCustomIcon('#eab308'); // Yellow
     case 'en_transit':
       return createCustomIcon('#3b82f6'); // Blue
+    case 'perdu':
     default:
       return createCustomIcon('#ef4444'); // Red
   }

@@ -3,7 +3,7 @@ export interface Trajet {
   nom_trajet: string;
   objet_nom: string;
   capteur_num_serie: string;
-  etat_objet: "recu" | "en_transit" | "stocke"; 
+  etat_objet: "recu" | "en_transit" | "stocke" | "perdu" | "reçu"; 
   localisation_actuelle: string;
   latitude_actuelle: number;
   longitude_actuelle: number;
