@@ -20,7 +20,7 @@ export function useLogin () {
             localStorage.setItem('clientId',response.data.client_id)
             localStorage.setItem('siteId',response.data.siteId || 1)
             localStorage.setItem('role',response.data.role)
-            localStorage.setItem('subdomain', response.data.subdomain+'.lvh.me')
+            localStorage.setItem('subdomain', response.data.subdomain)
             setSuccess('Logged in successfully')
 
         } catch (error) {
