@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const domain = 'http://'+localStorage.getItem('subdomain')+':8000/api'
+const domain = import.meta.env.VITE_PROTOCOL+'://'+ localStorage.getItem('subdomain')+'.'+import.meta.env.VITE_DOMAIN+':'+import.meta.env.VITE_PORT+'/' + 'api'
  
 export function useSSE<T = any>(url: string, defaultValue: T, getMessage: (event: any)=>T ) {
   const [message, setMessage] = useState<T>(defaultValue)
@@ -41,3 +41,5 @@ export function useSSE<T = any>(url: string, defaultValue: T, getMessage: (event
 
   return { message, error, loading }
 }
+
+
