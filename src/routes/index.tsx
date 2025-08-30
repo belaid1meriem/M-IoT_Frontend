@@ -3,16 +3,14 @@ import { routes as adminRoutes } from "@/routes/admin";
 import { routes as clientRoutes } from "@/routes/client";
 import { routes as authRoutes } from "@/routes/auth";
 import { Navigate } from "react-router";
-import { useAuth } from "@/contexts/AuthContext";
 import { applyRouteProtection } from "@/utils/routeProtection";
 
 const HomePage = () => {
-  const { accessToken } = useAuth();
   const userRole = localStorage.getItem('role');
   
   // Redirect authenticated users to their dashboard
-  if (accessToken && userRole) {
-    if (userRole === 'Admin') {
+  if (userRole) {
+    if (userRole === 'admin') {
       return <Navigate to="/admin/clients" replace />;
     } else if (userRole === 'Client') {
       const siteId = localStorage.getItem('siteId') || '1';

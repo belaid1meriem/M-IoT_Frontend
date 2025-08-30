@@ -10,7 +10,7 @@ const GuestGuard = ({ children }: GuestGuardProps) => {
   
   if (userRole) {
     // Redirect authenticated users to their appropriate dashboard
-    if (userRole === 'Admin') {
+    if (userRole === 'admin') {
       return <Navigate to="/admin/clients" replace />;
     } else if (userRole === 'Client') {
       const siteId = localStorage.getItem('siteId') || '1';

@@ -24,7 +24,7 @@ const ProtectedRoute = ({
   // Check if user has required role
   if (allowedRoles.length > 0 && userRole && !allowedRoles.includes(userRole)) {
     // Redirect to appropriate dashboard based on user's actual role
-    if (userRole === 'Admin') {
+    if (userRole === 'admin') {
       return <Navigate to="/admin/clients" replace />;
     } else if (userRole === 'Client') {
       const siteId = localStorage.getItem('siteId') || '1';

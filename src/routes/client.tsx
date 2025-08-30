@@ -13,7 +13,7 @@ export const routes: RouteConfig[] = [
     path: "client/:siteId",
     element: <Client/>,
     protection: {
-      allowedRoles: ["Client", "Admin"],
+      allowedRoles: ["Client"],
       requireAuth: true
     },
     children: [

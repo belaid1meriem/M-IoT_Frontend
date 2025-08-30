@@ -13,7 +13,7 @@ export const routes: RouteConfig[] = [
     path: "admin",
     element: <Admin/>,
     protection: {
-      allowedRoles: ["Admin"],
+      allowedRoles: ["admin"],
       requireAuth: true
     },
     children: [
