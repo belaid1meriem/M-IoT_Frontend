@@ -12,23 +12,23 @@ export const routes: RouteConfig[] = [
   {
     path: "client/:siteId",
     element: <Client/>,
+    protection: {
+      allowedRoles: ["Client", "Admin"],
+      requireAuth: true
+    },
     children: [
       {
         index: true,
         element: <Dashboard/>,
       },
-
       {
         path: "machine/:machineId",
         element: <Machine/>,
       },
-      
       {
         path: "alerts",
         element: <div>Alerts Page</div>,
       },
-
-
       {
         path: "assets-tracking",
         element: <Outlet/>,
@@ -57,7 +57,6 @@ export const routes: RouteConfig[] = [
           }
         ]
       },
-
       {
         path: "reports",
         element: <Outlet/>,
@@ -84,13 +83,10 @@ export const routes: RouteConfig[] = [
           },
         ]
       },
-
-
       {
         path: "tickets",
         element: <div>Tickets Page</div>,
       },
-      
       {
         path: "maintainance",
         element: <div>Maintainance Page</div>,
@@ -105,7 +101,6 @@ export const routes: RouteConfig[] = [
           }
         ]
       }
-
     ],
   },
 ];

@@ -1,7 +1,8 @@
 import ChangePassword from "@/pages/auth/ChangePassword";
 import Login from "@/pages/auth/Login";
+import ResetPassword from "@/pages/auth/ResetPassword";
 import type { RouteConfig } from "@/types/RouteConfig";
-import  { Outlet } from "react-router";
+import { Outlet } from "react-router";
 
 export const routes: RouteConfig[] = [
   {
@@ -11,16 +12,24 @@ export const routes: RouteConfig[] = [
       {
         path: "login",
         element: <Login />,
+        protection: {
+          guestOnly: true
+        }
       },
       {
         path: "change-password",
-        element: <ChangePassword/>
+        element: <ChangePassword/>,
+        protection: {
+          requireAuth: true
+        }
       },
       {
         path: "reset-password",
-        element: <div>Reset Password Page</div>,
+        element: <ResetPassword/>,
+        protection: {
+          guestOnly: true
+        }
       },
-      
     ]  
   }
-]
+];

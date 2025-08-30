@@ -12,6 +12,10 @@ export const routes: RouteConfig[] = [
   {
     path: "admin",
     element: <Admin/>,
+    protection: {
+      allowedRoles: ["Admin"],
+      requireAuth: true
+    },
     children: [
       {
         path: "clients",
@@ -59,7 +63,6 @@ export const routes: RouteConfig[] = [
         path: "tickets",
         element: <div>Tickets Page</div>,
       },
-      
       {
         path: "maintainance",
         element: <div>Maintainance Page</div>,
