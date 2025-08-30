@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-const domain = 'http://'+localStorage.getItem('subdomain')+':8000/api'
+const domain = 'http://'+localStorage.getItem('subdomain')+'.lvh.me'+':8000/api'
  
 export function useSSE<T = any>(url: string, defaultValue: T, getMessage: (event: any)=>T ) {
   const [message, setMessage] = useState<T>(defaultValue)
