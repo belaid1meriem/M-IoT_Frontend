@@ -28,7 +28,7 @@ export function useLogin () {
 
             setSuccess('Logged in successfully')
 
-            if(response.data.role === 'Admin'){
+            if(response.data.role === 'admin'){
                 navigate('/admin/clients')
             }
             if(response.data.role === 'Client'){
